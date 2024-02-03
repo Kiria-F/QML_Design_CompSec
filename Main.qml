@@ -9,9 +9,11 @@ Window {
         id: data
         visible: false
         property int labCount: 5
+        property QtObject clickedButton
     }
 
     MultiEffect {
+        id: topBarShadow
         source: topBarSelection
         anchors.fill: topBarSelection
         shadowEnabled: true
@@ -48,9 +50,8 @@ Window {
     Rectangle {
         id: topBar
         property int numSpace: 15
-        property int numSize: 20
-        height: childrenRect.height
-        width: childrenRect.width + numSpace * 3
+        height: 40
+        width: topBarRow.width + numSpace * 3
         color: "transparent"
         anchors {
             horizontalCenter: parent.horizontalCenter
@@ -60,8 +61,8 @@ Window {
 
         MouseArea {
             hoverEnabled: true
-            width: childrenRect.width
-            height: childrenRect.height
+            width: topBarRow.width
+            height: topBar.height
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 verticalCenter: parent.verticalCenter
@@ -81,8 +82,8 @@ Window {
                     MouseArea {
                         id: topBarRowMA
                         hoverEnabled: true
-                        height: childrenRect.height + topBar.numSpace
-                        width: childrenRect.width + topBar.numSpace
+                        height: topBar.height
+                        width: topBarNumber.width + topBar.numSpace
                         property bool hovered: false
                         onEntered: {
                             topBarSelection.width = topBarSelection.height
@@ -92,22 +93,115 @@ Window {
                         onExited: {
                             topBarNumber.color = topBarNumber.defaultColor
                         }
+                        onClicked: {
+                            data.clickedButton = this
+                            topBarClickAnimation.restart()
+                        }
 
                         Text {
                             id: topBarNumber
-                            anchors {
-                                horizontalCenter: parent.horizontalCenter
-                                verticalCenter: parent.verticalCenter
-                            }
+                            property int defaultY: (parent.height - height) / 2
+                            y: defaultY
+                            anchors.horizontalCenter: parent.horizontalCenter
                             property string defaultColor: "#aaa"
 
                             color: defaultColor
                             font {
                                 family: "monospace"
                                 bold: true
-                                pixelSize: topBar.numSize
+                                pixelSize: topBar.height / 2
                             }
                             text: index + 1
+                        }
+
+                        SequentialAnimation {
+                            id: topBarClickAnimation
+
+                            ParallelAnimation {
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowBlur"
+                                    to: 0
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowVerticalOffset"
+                                    to: 0
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowOpacity"
+                                    to: 0.3
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarSelection
+                                    property: "y"
+                                    to: topBar.y + 3
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarNumber
+                                    property: "y"
+                                    to: topBarNumber.defaultY + 3
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+
+                            ParallelAnimation {
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowBlur"
+                                    to: 0.5
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowVerticalOffset"
+                                    to: 3
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarShadow
+                                    property: "shadowOpacity"
+                                    to: 0.1
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarSelection
+                                    property: "y"
+                                    to: topBar.y
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
+                                NumberAnimation {
+                                    target: topBarNumber
+                                    property: "y"
+                                    to: topBarNumber.defaultY
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
                         }
                     }
                 }
