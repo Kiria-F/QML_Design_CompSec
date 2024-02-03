@@ -220,6 +220,7 @@ Window {
         Loader {
             anchors.fill: parent
             id: labLoader
+            source: "LoaderPlug.qml"
         }
     }
 }

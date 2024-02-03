@@ -1,16 +1,21 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     anchors.fill: parent
-    Text {
-        anchors.centerIn: parent
 
-        text: "Coming soon"
+    Shape {
+        //anchors.centerIn: parent
+        anchors.fill: parent
         opacity: 0.2
-        font {
-            family: "monospace"
-            bold: true
-            pixelSize: 50
+
+        ShapePath {
+            fillColor: "black"
+
+            PathLine { x: 0; y: 0 }
+            PathLine { x: width; y: 0 }
+            PathLine { x: width; y: height }
+            PathLine { x: 0; y: height }
         }
     }
 }
