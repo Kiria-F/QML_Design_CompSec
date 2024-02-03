@@ -3,10 +3,7 @@ import QtQuick
 Item {
     anchors.fill: parent
     Text {
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            verticalCenter: parent.verticalCenter
-        }
+        anchors.centerIn: parent
 
         text: "Coming soon"
         opacity: 0.2
