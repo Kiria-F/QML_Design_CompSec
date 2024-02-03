@@ -96,6 +96,7 @@ Window {
                         onClicked: {
                             data.clickedButton = this
                             topBarClickAnimation.restart()
+                            labLoader.setSource("Lab" + (index + 1) + ".qml")
                         }
 
                         Text {
@@ -207,11 +208,18 @@ Window {
                 }
             }
         }
+    }
 
-        Rectangle {
-            id: mainContainer
+    Rectangle {
+        id: labContainer
+        width: parent.width
+        height: parent.height - topBar.height - 20
+        anchors.bottom: parent.bottom
+        color: "transparent"
 
-            property list<QtObject> labs: [Lab1, Lab2]
+        Loader {
+            anchors.fill: parent
+            id: labLoader
         }
     }
 }
