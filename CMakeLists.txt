@@ -25,6 +25,7 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES Lab5.qml
     QML_FILES LoaderPlug.qml
     QML_FILES WButton.qml
+    QML_FILES WStateButton.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

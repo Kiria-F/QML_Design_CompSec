@@ -6,7 +6,7 @@ Item {
     property string text
     height: 40
     width: 100
-    signal clicked(MouseEvent mouse)
+    signal clicked(var mouse)
 
     Rectangle {
         id: wButtonRect

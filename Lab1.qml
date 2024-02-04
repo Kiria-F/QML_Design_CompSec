@@ -17,12 +17,44 @@ Item {
             pixelSize: 20
         }
     }
-
-    WButton {
+    Column {
+        spacing: 10
         anchors.centerIn: parent
-        text: "Press"
-        onClicked: {
-            text = "Pressed"
+        WStateButton {
+            id: b1
+            text: "Press"
+            onClicked: {
+                text = "Pressed"
+                b2.release()
+                b3.release()
+            }
+            onReleased: {
+                text = "Press"
+            }
+        }
+        WStateButton {
+            id: b2
+            text: "Press"
+            onClicked: {
+                text = "Pressed"
+                b1.release()
+                b3.release()
+            }
+            onReleased: {
+                text = "Press"
+            }
+        }
+        WStateButton {
+            id: b3
+            text: "Press"
+            onClicked: {
+                text = "Pressed"
+                b1.release()
+                b2.release()
+            }
+            onReleased: {
+                text = "Press"
+            }
         }
     }
 }
