@@ -145,6 +145,14 @@ Window {
                                     easing.type: Easing.InOutQuad
                                 }
 
+                                PropertyAnimation {
+                                    target: topBarSelection
+                                    property: "color"
+                                    to: "#fafafa"
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
                                 NumberAnimation {
                                     target: topBarSelection
                                     property: "y"
@@ -188,6 +196,14 @@ Window {
                                     easing.type: Easing.InOutQuad
                                 }
 
+                                PropertyAnimation {
+                                    target: topBarSelection
+                                    property: "color"
+                                    to: "#ffffff"
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+
                                 NumberAnimation {
                                     target: topBarSelection
                                     property: "y"
@@ -222,12 +238,24 @@ Window {
             anchors.fill: parent
             id: labStack
             initialItem: "LoaderPlug.qml"
-        }
 
-        // Loader {
-        //     anchors.fill: parent
-        //     id: labLoader
-        //     source: "LoaderPlug.qml"
-        // }
+            replaceEnter: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 200
+                }
+            }
+
+            replaceExit: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                    duration: 200
+                }
+            }
+        }
     }
 }

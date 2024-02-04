@@ -1,51 +1,28 @@
 import QtQuick
 import QtQuick.Shapes
+import QtQuick.Effects
 import QtQuick.Controls
 
 Item {
-    Column {
-        anchors.centerIn: parent
-        StackView {
-            id: sv
-            width: 200
-            height: 200
-            initialItem: Rectangle {
-                width: 200
-                height: 200
-                color: "gray"
-            }
+    TextField {
+        anchors {
+            left: parent.left
+            leftMargin: 20
+            verticalCenter: parent.verticalCenter
         }
-        Row {
-            Button {
-                text: "G"
-                onClicked: sv.replace(gr)
-            }
-            Button {
-                text: "B"
-                onClicked: sv.replace(br)
-            }
-            Button {
-                text: ">"
-                onClicked: sv.pop()
-            }
-        }
-        Rectangle {
-            id: gr
-            color: "green"
-            width: 200
-            height: 200
-        }
-        Rectangle {
-            id: br
-            color: "black"
-            width: 200
-            height: 200
+        validator: RegularExpressionValidator { regularExpression: /^[\d]{1,9}$/ }
+        font {
+            family: "monospace"
+            bold: true
+            pixelSize: 20
         }
     }
 
-    Shape {
-        //anchors.centerIn: parent
-        anchors.fill: parent
-        opacity: 0.2
+    WButton {
+        anchors.centerIn: parent
+        text: "Press"
+        onClicked: {
+            text = "Pressed"
+        }
     }
 }
