@@ -73,6 +73,14 @@ Item {
         id: wButtonClickAnimation
 
         PropertyAnimation {
+            target: wButtonText
+            property: "color"
+            to: "#666"
+            duration: 200
+            easing.type: Easing.InOutQuad
+        }
+
+        PropertyAnimation {
             target: wButtonRect
             property: "border.width"
             to: 2
@@ -115,7 +123,7 @@ Item {
         PropertyAnimation {
             target: wButtonShadow
             property: "shadowOpacity"
-            to: 0.3
+            to: 0.5
             duration: 200
             easing.type: Easing.InOutQuad
         }
@@ -141,6 +149,14 @@ Item {
         id: wButtonReleaseAnimation
 
         PropertyAnimation {
+            target: wButtonText
+            property: "color"
+            to: wButtonText.defaultColor
+            duration: 200
+            easing.type: Easing.InOutQuad
+        }
+
+        PropertyAnimation {
             target: wButtonRect
             property: "border.width"
             to: 0
@@ -159,7 +175,7 @@ Item {
         NumberAnimation {
             target: wButtonShadow
             property: "shadowBlur"
-            to: 0.5
+            to: 0.3
             duration: 200
             easing.type: Easing.InOutQuad
         }
@@ -183,7 +199,7 @@ Item {
         NumberAnimation {
             target: wButtonShadow
             property: "shadowOpacity"
-            to: 0.1
+            to: 0.3
             duration: 200
             easing.type: Easing.InOutQuad
         }
@@ -211,10 +227,10 @@ Item {
         source: wButtonRect
         anchors.fill: wButtonRect
         shadowEnabled: true
-        shadowBlur: 0.5
+        shadowBlur: 0.3
         shadowScale: 1
         shadowColor: 'black'
-        shadowOpacity: 0.2
+        shadowOpacity: 0.3
         shadowVerticalOffset: 3
     }
 }

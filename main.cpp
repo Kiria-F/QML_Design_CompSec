@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "geometry.h"
+#include "labcore1.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +11,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     Geometry geometry;
     engine.rootContext()->setContextProperty("geometry", &geometry);
+    LabCore1 labCore1;
+    engine.rootContext()->setContextProperty("labCore1", &labCore1);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

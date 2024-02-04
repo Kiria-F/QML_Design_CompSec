@@ -4,57 +4,119 @@ import QtQuick.Effects
 import QtQuick.Controls
 
 Item {
-    TextField {
+    id: lab1
+    property int selectedMode: 0
+
+    Rectangle {
+        height: 40
+        width: 100
         anchors {
             left: parent.left
-            leftMargin: 20
+            leftMargin: 40
             verticalCenter: parent.verticalCenter
         }
-        validator: RegularExpressionValidator { regularExpression: /^[\d]{1,9}$/ }
+        border {
+            width: 1
+            color: "black"
+        }
+
+        TextEdit {
+            // anchors {
+            //     // fill: parent
+            //     // anchors.margins: 5
+            //     centerIn: parent
+            // }
+            anchors.verticalCenter: parent.verticalCenter
+            width: contentWidth + parent.width / 2
+            x: (parent.width - contentWidth) / 2
+            id: keyField
+            // validator: RegularExpressionValidator { regularExpression: /^[\d]{1,9}$/ }
+            font {
+                family: "monospace"
+                bold: true
+                pixelSize: 20
+            }
+            onTextChanged: {
+                let pos = cursorPosition
+                let aLen = text.length;
+                text = labCore1.validateKey(text);
+                cursorPosition = pos - (aLen - text.length)
+            }
+        }
+    }
+
+    TextArea {
+        id: hashArea
+        anchors {
+            right: parent.right
+            rightMargin: 40
+            verticalCenter: parent.verticalCenter
+        }
         font {
             family: "monospace"
             bold: true
             pixelSize: 20
         }
     }
+
     Column {
         spacing: 10
         anchors.centerIn: parent
-        WStateButton {
-            id: b1
-            text: "Press"
-            onClicked: {
-                text = "Pressed"
-                b2.release()
-                b3.release()
+
+        Row {
+            spacing: 10
+
+            WStateButton {
+                id: btnMD5
+                text: "MD5"
+                onClicked: {
+                    btnSHA1.release()
+                    btnSHA256.release()
+                    btnSHA512.release()
+                    lab1.selectedMode = 0
+                }
             }
-            onReleased: {
-                text = "Press"
+
+            WStateButton {
+                id: btnSHA1
+                text: "SHA1"
+                onClicked: {
+                    btnMD5.release()
+                    btnSHA256.release()
+                    btnSHA512.release()
+                    lab1.selectedMode = 1
+                }
             }
         }
-        WStateButton {
-            id: b2
-            text: "Press"
-            onClicked: {
-                text = "Pressed"
-                b1.release()
-                b3.release()
+
+        Row {
+            spacing: 10
+
+            WStateButton {
+                id: btnSHA256
+                text: "SHA256"
+                onClicked: {
+                    btnMD5.release()
+                    btnSHA1.release()
+                    btnSHA512.release()
+                    lab1.selectedMode = 2
+                }
             }
-            onReleased: {
-                text = "Press"
+
+            WStateButton {
+                id: btnSHA512
+                text: "SHA512"
+                onClicked: {
+                    btnMD5.release()
+                    btnSHA1.release()
+                    btnSHA256.release()
+                    lab1.selectedMode = 3
+                }
             }
         }
-        WStateButton {
-            id: b3
-            text: "Press"
-            onClicked: {
-                text = "Pressed"
-                b1.release()
-                b2.release()
-            }
-            onReleased: {
-                text = "Press"
-            }
+
+        Row {
+
         }
     }
 }
