@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Shapes
 
 Item {
-    anchors.fill: parent
     Column {
         anchors.centerIn: parent
 

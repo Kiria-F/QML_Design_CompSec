@@ -1,7 +1,6 @@
 import QtQuick
 
 Item {
-    anchors.fill: parent
     Text {
         anchors.centerIn: parent
 

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Controls
 
 Window {
     visible: true
@@ -96,7 +97,7 @@ Window {
                         onClicked: {
                             data.clickedButton = this
                             topBarClickAnimation.restart()
-                            labLoader.setSource("Lab" + (index + 1) + ".qml")
+                            labStack.replace("Lab" + (index + 1) + ".qml")
                         }
 
                         Text {
@@ -217,10 +218,16 @@ Window {
         anchors.bottom: parent.bottom
         color: "transparent"
 
-        Loader {
+        StackView {
             anchors.fill: parent
-            id: labLoader
-            source: "LoaderPlug.qml"
+            id: labStack
+            initialItem: "LoaderPlug.qml"
         }
+
+        // Loader {
+        //     anchors.fill: parent
+        //     id: labLoader
+        //     source: "LoaderPlug.qml"
+        // }
     }
 }
