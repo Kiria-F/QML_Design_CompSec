@@ -5,25 +5,17 @@
 
 struct ArcConnectResult {
     Q_GADGET
-    Q_PROPERTY(float dx READ dx WRITE setDx)
+    Q_PROPERTY(float dx MEMBER _dx)
     float _dx;
-    Q_PROPERTY(float dy READ dy WRITE setDy)
+    Q_PROPERTY(float dy MEMBER _dy)
     float _dy;
-    Q_PROPERTY(float ex READ ex WRITE setEx)
+    Q_PROPERTY(float ex MEMBER _ex)
     float _ex;
-    Q_PROPERTY(float ey READ ey WRITE setEy)
+    Q_PROPERTY(float ey MEMBER _ey)
     float _ey;
 public:
     ArcConnectResult();
     ArcConnectResult(float dx, float dy, float ex, float ey);
-    float dx() const;
-    void setDx(float dx);
-    float dy() const;
-    void setDy(float dx);
-    float ex() const;
-    void setEx(float dx);
-    float ey() const;
-    void setEy(float dx);
 };
 
 class Geometry : public QObject

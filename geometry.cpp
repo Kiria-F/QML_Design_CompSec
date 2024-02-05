@@ -4,38 +4,6 @@ ArcConnectResult::ArcConnectResult() {}
 
 ArcConnectResult::ArcConnectResult(float dx, float dy, float ex, float ey) : _dx(dx), _dy(dy), _ex(ex), _ey(ey) {}
 
-float ArcConnectResult::dx() const {
-    return _dx;
-}
-
-void ArcConnectResult::setDx(float dx) {
-    _dx = dx;
-}
-
-float ArcConnectResult::dy() const {
-    return _dy;
-}
-
-void ArcConnectResult::setDy(float dy) {
-    _dy = dy;
-}
-
-float ArcConnectResult::ex() const {
-    return _ex;
-}
-
-void ArcConnectResult::setEx(float ex) {
-    _ex = ex;
-}
-
-float ArcConnectResult::ey() const {
-    return _ey;
-}
-
-void ArcConnectResult::setEy(float ey) {
-    _ey = ey;
-}
-
 Geometry::Geometry(QObject *parent)
     : QObject{parent}
 {}

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Effects
 import QtQuick.Controls
+import "."
 
 Item {
     id: lab1
@@ -10,6 +11,7 @@ Item {
     Rectangle {
         height: 40
         width: 100
+        radius: height / 2
         anchors {
             left: parent.left
             leftMargin: 40
@@ -21,16 +23,15 @@ Item {
         }
 
         TextEdit {
-            // anchors {
-            //     // fill: parent
-            //     // anchors.margins: 5
-            //     centerIn: parent
-            // }
-            anchors.verticalCenter: parent.verticalCenter
-            width: contentWidth + parent.width / 2
-            x: (parent.width - contentWidth) / 2
             id: keyField
-            // validator: RegularExpressionValidator { regularExpression: /^[\d]{1,9}$/ }
+            anchors {
+                fill: parent
+                topMargin: 6
+                bottomMargin: 6
+                leftMargin: 8
+                rightMargin: 8
+            }
+            horizontalAlignment: TextEdit.AlignHCenter
             font {
                 family: "monospace"
                 bold: true
@@ -41,6 +42,15 @@ Item {
                 let aLen = text.length;
                 text = labCore1.validateKey(text);
                 cursorPosition = pos - (aLen - text.length)
+            }
+            PlaceholderText {
+                text: keyField.text.length === 0 ? "0000000" : ""
+                color: constants.weakTextColor
+                font {
+                    family: "monospace"
+                    bold: true
+                    pixelSize: 20
+                }
             }
         }
     }
