@@ -14,12 +14,12 @@ Item {
         radius: height / 2
         anchors {
             left: parent.left
-            leftMargin: 40
+            leftMargin: 100
             verticalCenter: parent.verticalCenter
         }
         border {
-            width: 1
-            color: "black"
+            width: 2
+            color: constants.strongTextColor
         }
 
         TextEdit {
@@ -32,6 +32,7 @@ Item {
                 rightMargin: 8
             }
             horizontalAlignment: TextEdit.AlignHCenter
+            color: constants.strongTextColor
             font {
                 family: "monospace"
                 bold: true
@@ -55,17 +56,79 @@ Item {
         }
     }
 
-    TextArea {
-        id: hashArea
+    Rectangle {
+        id: hashField
+        property real linesCount: 2
+        width: 7 * 16 - 2 + anchors.leftMargin + anchors.rightMargin
+        height: 28 * linesCount + 9 + anchors.topMargin + anchors.bottomMargin
+        radius: 20
         anchors {
             right: parent.right
-            rightMargin: 40
+            rightMargin: 100
             verticalCenter: parent.verticalCenter
         }
-        font {
-            family: "monospace"
-            bold: true
-            pixelSize: 20
+        border {
+            width: 2
+            color: constants.strongTextColor
+        }
+
+        states: [
+            State {
+                name: "MD5"
+                PropertyChanges {
+                    target: hashField
+                    linesCount: 2
+                }
+            },
+            State {
+                name: "SHA1"
+                PropertyChanges {
+                    target: hashField
+                    linesCount: 3
+                }
+            },
+            State {
+                name: "SHA256"
+                PropertyChanges {
+                    target: hashField
+                    linesCount: 4
+                }
+            },
+            State {
+                name: "SHA512"
+                PropertyChanges {
+                    target: hashField
+                    linesCount: 8
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                NumberAnimation {
+                    property: "linesCount"
+                    easing.type: Easing.InOutQuad
+                    duration: 200
+                }
+            }
+        ]
+
+        TextEdit {
+            id: hashFieldText
+            anchors {
+                fill: parent
+                topMargin: 6
+                bottomMargin: 6
+                leftMargin: 8
+                rightMargin: 8
+            }
+            color: constants.strongTextColor
+            font {
+                family: "monospace"
+                bold: true
+                pixelSize: 20
+            }
+            text: "0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000"
         }
     }
 
@@ -84,6 +147,7 @@ Item {
                     btnSHA256.release()
                     btnSHA512.release()
                     lab1.selectedMode = 0
+                    hashField.state = "MD5"
                 }
             }
 
@@ -95,6 +159,7 @@ Item {
                     btnSHA256.release()
                     btnSHA512.release()
                     lab1.selectedMode = 1
+                    hashField.state = "SHA1"
                 }
             }
         }
@@ -110,6 +175,7 @@ Item {
                     btnSHA1.release()
                     btnSHA512.release()
                     lab1.selectedMode = 2
+                    hashField.state = "SHA256"
                 }
             }
 
@@ -121,6 +187,7 @@ Item {
                     btnSHA1.release()
                     btnSHA256.release()
                     lab1.selectedMode = 3
+                    hashField.state = "SHA512"
                 }
             }
         }

@@ -55,12 +55,11 @@ Item {
 
         Text {
             id: wButtonText
-            property color defaultColor: "#aaa"
             property real defaultY: (parent.height - height) / 2
             y: defaultY
             anchors.horizontalCenter: parent.horizontalCenter
             text: wButton.text
-            color: defaultColor
+            color: constants.weakTextColor
             font {
                 pixelSize: 20
                 family: "monospace"
@@ -75,7 +74,7 @@ Item {
         PropertyAnimation {
             target: wButtonText
             property: "color"
-            to: "#666"
+            to: constants.strongTextColor
             duration: 200
             easing.type: Easing.InOutQuad
         }
@@ -91,7 +90,7 @@ Item {
         PropertyAnimation {
             target: wButtonRect
             property: "border.color"
-            to: "#aaaaaa"
+            to: constants.weakTextColor
             duration: 200
             easing.type: Easing.InOutQuad
         }
@@ -151,7 +150,7 @@ Item {
         PropertyAnimation {
             target: wButtonText
             property: "color"
-            to: wButtonText.defaultColor
+            to: constants.weakTextColor
             duration: 200
             easing.type: Easing.InOutQuad
         }

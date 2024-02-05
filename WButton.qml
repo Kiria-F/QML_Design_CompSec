@@ -40,12 +40,11 @@ Item {
 
         Text {
             id: wButtonText
-            property color defaultColor: "#aaa"
             property real defaultY: (parent.height - height) / 2
             y: defaultY
             anchors.horizontalCenter: parent.horizontalCenter
             text: wButton.text
-            color: defaultColor
+            color: constants.weakTextColor
             font {
                 pixelSize: 20
                 family: "monospace"
