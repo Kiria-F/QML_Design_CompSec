@@ -205,6 +205,17 @@ Item {
         }
     }
 
+    WButton {
+        id: hashBtn
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: tar.o + ars.w / 2 - 10
+        z: 1
+        text: "Hash"
+        onClicked: {
+            hashFieldText.text = labCore1.hash(hashField.state, keyFieldText.text)
+        }
+    }
+
     Shape {
         id: ars
         opacity: 0.075
