@@ -54,9 +54,8 @@ QString LabCore1::hash(QString mode, QString key) {
     else if (mode == "SHA512") byteHash = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha512);
     char byteSigns[16] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     QString strHash;
-    for (char b : byteHash) {
-        strHash.append(byteSigns[b & 0x0f]);
-        b >>= 4;
+    for (char& b : byteHash) {
+        strHash.append(byteSigns[b >> 4 & 0x0f]);
         strHash.append(byteSigns[b & 0x0f]);
     }
     return strHash;
