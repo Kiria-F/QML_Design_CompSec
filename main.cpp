@@ -10,12 +10,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    Constants constants;
-    engine.rootContext()->setContextProperty("constants", &constants);
-    Geometry geometry;
-    engine.rootContext()->setContextProperty("geometry", &geometry);
-    LabCore1 labCore1;
-    engine.rootContext()->setContextProperty("labCore1", &labCore1);
+    Constants* constants = new Constants(&app);
+    engine.rootContext()->setContextProperty("constants", constants);
+    Geometry* geometry = new Geometry(&app);
+    engine.rootContext()->setContextProperty("geometry", geometry);
+    LabCore1* labCore1 = new LabCore1(&app);
+    engine.rootContext()->setContextProperty("labCore1", labCore1);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

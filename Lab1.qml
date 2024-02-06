@@ -108,7 +108,7 @@ Item {
                 NumberAnimation {
                     property: "linesCount"
                     easing.type: Easing.InOutQuad
-                    duration: 200
+                    duration: 400
                 }
             }
         ]
@@ -128,7 +128,6 @@ Item {
                 bold: true
                 pixelSize: 20
             }
-            text: "0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000\n0000000000000000"
         }
     }
 
