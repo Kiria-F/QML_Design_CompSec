@@ -1,8 +1,15 @@
 import QtQuick
 
 Item {
-    Rectangle {
-        anchors.fill: parent
-        color: "green"
+    Text {
+        anchors.centerIn: parent
+
+        text: "Coming soon"
+        opacity: 0.2
+        font {
+            family: "monospace"
+            bold: true
+            pixelSize: 50
+        }
     }
 }

@@ -227,28 +227,28 @@ Item {
         ShapePath {
             id: tar
             fillColor: "black"
-            property real b: hashField.y - ars.space - ars.tipH - ars.preTip;
-            property real t: b - ars.w
-            property real lb: keyField.y - ars.space
-            property real rb: hashField.y - ars.space
-            property real tipY: rb - ars.tipH;
+            property real i: hashField.y - ars.space - ars.tipH - ars.preTip;
+            property real o: i - ars.w
+            property real li: keyField.y - ars.space
+            property real ri: hashField.y - ars.space
+            property real tipY: ri - ars.tipH;
 
             startX: ars.ll + ars.br
-            startY: lb
+            startY: li
             PathArc { relativeX: -ars.br; relativeY: -ars.br; radiusX: ars.br; radiusY: ars.br }
-            PathLine { relativeX: 0; y: tar.t + ars.r }
+            PathLine { relativeX: 0; y: tar.o + ars.r }
             PathArc { relativeX: ars.br; relativeY: -ars.br; radiusX: ars.br; radiusY: ars.br }
             PathLine { x: ars.rr - ars.br; relativeY: 0 }
             PathArc { relativeX: ars.br; relativeY: ars.br; radiusX: ars.br; radiusY: ars.br }
             PathLine { relativeX: 0; y: tar.tipY - ars.r }
             PathArc { relativeX: ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
-            property var t1: geometry.arcConnect(ars.r, ars.rc, tar.tipY, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.rb)
+            property var t1: geometry.arcConnect(ars.r, ars.rc, tar.tipY, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.ri)
             PathLine { x: tar.t1.lx; y: tar.t1.ly }
             PathArc { x: tar.t1.ax; y: tar.t1.ay; radiusX: ars.r; radiusY: ars.r; }
-            property var t2: geometry.arcConnect(ars.r, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.rb, ars.rc - ars.tipW / 2, tar.tipY)
+            property var t2: geometry.arcConnect(ars.r, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.ri, ars.rc - ars.tipW / 2, tar.tipY)
             PathLine { x: tar.t2.lx; y: tar.t2.ly }
             PathArc { x: tar.t2.ax; y: tar.t2.ay; radiusX: ars.r; radiusY: ars.r; }
-            property var t3: geometry.arcConnect(ars.r, ars.rc, tar.rb, ars.rc - ars.tipW / 2, tar.tipY, ars.rc, tar.tipY)
+            property var t3: geometry.arcConnect(ars.r, ars.rc, tar.ri, ars.rc - ars.tipW / 2, tar.tipY, ars.rc, tar.tipY)
             PathLine { x: tar.t3.lx; y: tar.t3.ly }
             PathArc { x: tar.t3.ax; y: tar.t3.ay; radiusX: ars.r; radiusY: ars.r; }
             PathLine { x: ars.rl - ars.r; relativeY: 0 }
@@ -257,16 +257,8 @@ Item {
             PathArc { relativeX: -ars.r; relativeY: -ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
             PathLine { x: ars.lr + ars.r; relativeY: 0 }
             PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
-            PathLine { relativeX: 0; y: tar.lb - ars.br }
+            PathLine { relativeX: 0; y: tar.li - ars.br }
             PathArc { relativeX: -ars.br; relativeY: ars.br; radiusX: ars.br; radiusY: ars.br; }
-
-
-            // PathLine { relativeX: 0; y: tar.b + ars.r }
-            // PathArc { relativeX: -ars.r; relativeY: -ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
-            // PathLine { x: ars.lr + ars.r; relativeY: 0 }
-            // PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
-            // PathLine { relativeX: 0; y: tar.lb - ars.r }
-            // PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r }
         }
     }
     Shape {
