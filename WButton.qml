@@ -85,7 +85,7 @@ Item {
             NumberAnimation {
                 target: wButtonShadow
                 property: "shadowOpacity"
-                to: 0.3
+                to: 0.5
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
@@ -112,7 +112,7 @@ Item {
             NumberAnimation {
                 target: wButtonShadow
                 property: "shadowBlur"
-                to: 0.5
+                to: 0.3
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
@@ -137,7 +137,7 @@ Item {
             NumberAnimation {
                 target: wButtonShadow
                 property: "shadowOpacity"
-                to: 0.1
+                to: 0.3
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
@@ -166,10 +166,10 @@ Item {
         source: wButtonRect
         anchors.fill: wButtonRect
         shadowEnabled: true
-        shadowBlur: 0.5
+        shadowBlur: 0.3
         shadowScale: 1
         shadowColor: 'black'
-        shadowOpacity: 0.2
+        shadowOpacity: 0.3
         shadowVerticalOffset: 3
     }
 }
