@@ -48,10 +48,10 @@ QString LabCore1::validateHash(QString hashType, QString hash) {
 
 QString LabCore1::hash(QString mode, QString key) {
     QByteArray byteHash;
-    if (mode == "MD5") byteHash = QCryptographicHash::hash(mode.toUtf8(), QCryptographicHash::Md5);
-    else if (mode == "SHA1") byteHash = QCryptographicHash::hash(mode.toUtf8(), QCryptographicHash::Sha1);
-    else if (mode == "SHA256") byteHash = QCryptographicHash::hash(mode.toUtf8(), QCryptographicHash::Sha256);
-    else if (mode == "SHA512") byteHash = QCryptographicHash::hash(mode.toUtf8(), QCryptographicHash::Sha512);
+    if (mode == "MD5") byteHash = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5);
+    else if (mode == "SHA1") byteHash = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha1);
+    else if (mode == "SHA256") byteHash = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha256);
+    else if (mode == "SHA512") byteHash = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha512);
     char byteSigns[16] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     QString strHash;
     for (char b : byteHash) {
