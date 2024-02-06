@@ -109,7 +109,7 @@ Window {
 
                             color: defaultColor
                             font {
-                                family: "monospace"
+                                family: constants.fontFamily
                                 bold: true
                                 pixelSize: topBar.height / 2
                             }

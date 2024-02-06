@@ -5,13 +5,13 @@
 
 struct ArcConnectResult {
     Q_GADGET
-    Q_PROPERTY(float dx MEMBER _dx)
+    Q_PROPERTY(float lx MEMBER _dx)
     float _dx;
-    Q_PROPERTY(float dy MEMBER _dy)
+    Q_PROPERTY(float ly MEMBER _dy)
     float _dy;
-    Q_PROPERTY(float ex MEMBER _ex)
+    Q_PROPERTY(float ax MEMBER _ex)
     float _ex;
-    Q_PROPERTY(float ey MEMBER _ey)
+    Q_PROPERTY(float ay MEMBER _ey)
     float _ey;
 public:
     ArcConnectResult();

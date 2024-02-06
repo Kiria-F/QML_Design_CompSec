@@ -62,7 +62,7 @@ Item {
             color: constants.weakTextColor
             font {
                 pixelSize: 20
-                family: "monospace"
+                family: constants.fontFamily
                 bold: true
             }
         }

@@ -6,9 +6,9 @@ import "."
 
 Item {
     id: lab1
-    property int selectedMode: 0
 
     Rectangle {
+        id: keyField
         height: 40
         width: 100
         radius: height / 2
@@ -23,7 +23,7 @@ Item {
         }
 
         TextEdit {
-            id: keyField
+            id: keyFieldText
             anchors {
                 fill: parent
                 topMargin: 6
@@ -34,7 +34,7 @@ Item {
             horizontalAlignment: TextEdit.AlignHCenter
             color: constants.strongTextColor
             font {
-                family: "monospace"
+                family: constants.fontFamily
                 bold: true
                 pixelSize: 20
             }
@@ -44,11 +44,12 @@ Item {
                 text = labCore1.validateKey(text);
                 cursorPosition = pos - (aLen - text.length)
             }
+
             PlaceholderText {
-                text: keyField.text.length === 0 ? "0000000" : ""
+                text: keyFieldText.text.length === 0 ? "0000000" : ""
                 color: constants.weakTextColor
                 font {
-                    family: "monospace"
+                    family: constants.fontFamily
                     bold: true
                     pixelSize: 20
                 }
@@ -124,16 +125,28 @@ Item {
             }
             color: constants.strongTextColor
             font {
-                family: "monospace"
+                family: "JetBrainsMono Nerd Font"
                 bold: true
                 pixelSize: 20
+            }
+            inputMethodHints: Qt.ImhNone
+            onTextChanged: {
+                let pos = cursorPosition
+                let aLen = text.length;
+                text = labCore1.validateHash(hashField.state, text);
+                cursorPosition = pos - (aLen - text.length)
             }
         }
     }
 
     Column {
+        id: buttonsContainer
         spacing: 10
         anchors.centerIn: parent
+
+        function commonHandler() {
+            hashFieldText.text = labCore1.validateHash(hashField.state, hashFieldText.text);
+        }
 
         Row {
             spacing: 10
@@ -145,8 +158,8 @@ Item {
                     btnSHA1.release()
                     btnSHA256.release()
                     btnSHA512.release()
-                    lab1.selectedMode = 0
                     hashField.state = "MD5"
+                    buttonsContainer.commonHandler()
                 }
             }
 
@@ -157,8 +170,8 @@ Item {
                     btnMD5.release()
                     btnSHA256.release()
                     btnSHA512.release()
-                    lab1.selectedMode = 1
                     hashField.state = "SHA1"
+                    buttonsContainer.commonHandler()
                 }
             }
         }
@@ -173,8 +186,8 @@ Item {
                     btnMD5.release()
                     btnSHA1.release()
                     btnSHA512.release()
-                    lab1.selectedMode = 2
                     hashField.state = "SHA256"
+                    buttonsContainer.commonHandler()
                 }
             }
 
@@ -185,14 +198,90 @@ Item {
                     btnMD5.release()
                     btnSHA1.release()
                     btnSHA256.release()
-                    lab1.selectedMode = 3
                     hashField.state = "SHA512"
+                    buttonsContainer.commonHandler()
                 }
             }
         }
+    }
 
-        Row {
+    Shape {
+        id: ars
+        opacity: 0.075
+        anchors.fill: parent
+        antialiasing: true
+        property real w: keyField.width
+        property real r: 10
+        property real br: 20
+        property real space: 10
+        property real tipW: 200
+        property real tipH: 100
+        property real preTip: 40
+        property real lc: keyField.x + keyField.width / 2
+        property real ll: lc - w / 2
+        property real lr: ll + w
+        property real rc: hashField.x + hashField.width / 2
+        property real rl: rc - w / 2
+        property real rr: rl + w
 
+        ShapePath {
+            id: tar
+            fillColor: "black"
+            property real b: hashField.y - ars.space - ars.tipH - ars.preTip;
+            property real t: b - ars.w
+            property real lb: keyField.y - ars.space
+            property real rb: hashField.y - ars.space
+            property real tipY: rb - ars.tipH;
+
+            startX: ars.ll + ars.br
+            startY: lb
+            PathArc { relativeX: -ars.br; relativeY: -ars.br; radiusX: ars.br; radiusY: ars.br }
+            PathLine { relativeX: 0; y: tar.t + ars.r }
+            PathArc { relativeX: ars.br; relativeY: -ars.br; radiusX: ars.br; radiusY: ars.br }
+            PathLine { x: ars.rr - ars.br; relativeY: 0 }
+            PathArc { relativeX: ars.br; relativeY: ars.br; radiusX: ars.br; radiusY: ars.br }
+            PathLine { relativeX: 0; y: tar.tipY - ars.r }
+            PathArc { relativeX: ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            property var t1: geometry.arcConnect(ars.r, ars.rc, tar.tipY, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.rb)
+            PathLine { x: tar.t1.lx; y: tar.t1.ly }
+            PathArc { x: tar.t1.ax; y: tar.t1.ay; radiusX: ars.r; radiusY: ars.r; }
+            property var t2: geometry.arcConnect(ars.r, ars.rc + ars.tipW / 2, tar.tipY, ars.rc, tar.rb, ars.rc - ars.tipW / 2, tar.tipY)
+            PathLine { x: tar.t2.lx; y: tar.t2.ly }
+            PathArc { x: tar.t2.ax; y: tar.t2.ay; radiusX: ars.r; radiusY: ars.r; }
+            property var t3: geometry.arcConnect(ars.r, ars.rc, tar.rb, ars.rc - ars.tipW / 2, tar.tipY, ars.rc, tar.tipY)
+            PathLine { x: tar.t3.lx; y: tar.t3.ly }
+            PathArc { x: tar.t3.ax; y: tar.t3.ay; radiusX: ars.r; radiusY: ars.r; }
+            PathLine { x: ars.rl - ars.r; relativeY: 0 }
+            PathArc { relativeX: ars.r; relativeY: -ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            PathLine { relativeX: 0; y: tar.b + ars.r}
+            PathArc { relativeX: -ars.r; relativeY: -ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            PathLine { x: ars.lr + ars.r; relativeY: 0 }
+            PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            PathLine { relativeX: 0; y: tar.lb - ars.br }
+            PathArc { relativeX: -ars.br; relativeY: ars.br; radiusX: ars.br; radiusY: ars.br; }
+
+
+            // PathLine { relativeX: 0; y: tar.b + ars.r }
+            // PathArc { relativeX: -ars.r; relativeY: -ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            // PathLine { x: ars.lr + ars.r; relativeY: 0 }
+            // PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r; direction: PathArc.Counterclockwise }
+            // PathLine { relativeX: 0; y: tar.lb - ars.r }
+            // PathArc { relativeX: -ars.r; relativeY: ars.r; radiusX: ars.r; radiusY: ars.r }
+        }
+    }
+    Shape {
+        id: debugDot
+        visible: false
+        property real cx: ars.rc
+        property real cy: tar.tipY
+        property real r: 6
+        antialiasing: true
+        ShapePath {
+            fillColor: "red"
+            startX: debugDot.cx - debugDot.r
+            startY: debugDot.cy
+            PathArc { relativeX: 2 * debugDot.r; relativeY: 0; radiusX: debugDot.r; radiusY: debugDot.r }
+            PathArc { relativeX: -2 * debugDot.r; relativeY: 0; radiusX: debugDot.r; radiusY: debugDot.r }
         }
     }
 }

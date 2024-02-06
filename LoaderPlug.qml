@@ -28,14 +28,14 @@ Item {
                 PathLine { relativeX: 0; y: lpPath.h * lpPath.arrowSize + lpPath.r}
                 PathArc { relativeX: -lpPath.r; relativeY: -lpPath.r; direction: PathArc.Counterclockwise; radiusX: lpPath.r; radiusY: lpPath.r }
                 property var t1: geometry.arcConnect(r, startX, h * arrowSize, 0, h * arrowSize, w / 2, 0)
-                PathLine { x: lpPath.t1.dx; y: lpPath.t1.dy }
-                PathArc { x: lpPath.t1.ex; y: lpPath.t1.ey; radiusX: lpPath.r; radiusY: lpPath.r }
+                PathLine { x: lpPath.t1.lx; y: lpPath.t1.ly }
+                PathArc { x: lpPath.t1.ax; y: lpPath.t1.ay; radiusX: lpPath.r; radiusY: lpPath.r }
                 property var t2: geometry.arcConnect(r, 0, h * arrowSize, w / 2, 0, w, h * arrowSize)
-                PathLine { x: lpPath.t2.dx; y: lpPath.t2.dy }
-                PathArc { x: lpPath.t2.ex; y: lpPath.t2.ey; radiusX: lpPath.r; radiusY: lpPath.r }
+                PathLine { x: lpPath.t2.lx; y: lpPath.t2.ly }
+                PathArc { x: lpPath.t2.ax; y: lpPath.t2.ay; radiusX: lpPath.r; radiusY: lpPath.r }
                 property var t3: geometry.arcConnect(r, w / 2, 0, w, h * arrowSize, w - startX, h * arrowSize)
-                PathLine { x: lpPath.t3.dx; y: lpPath.t3.dy }
-                PathArc { x: lpPath.t3.ex; y: lpPath.t3.ey; radiusX: lpPath.r; radiusY: lpPath.r }
+                PathLine { x: lpPath.t3.lx; y: lpPath.t3.ly }
+                PathArc { x: lpPath.t3.ax; y: lpPath.t3.ay; radiusX: lpPath.r; radiusY: lpPath.r }
                 PathLine { x: lpPath.w / 2 + lpPath.w / 2 * lpPath.fat + lpPath.r ; relativeY: 0 }
                 PathArc { relativeX: -lpPath.r; relativeY: lpPath.r; direction: PathArc.Counterclockwise; radiusX: lpPath.r; radiusY: lpPath.r }
                 PathLine { relativeX: 0; y: lpPath.h - lpPath.r }
@@ -48,7 +48,7 @@ Item {
             text: "Choose a lab"
             opacity: 0.2
             font {
-                family: "monospace"
+                family: constants.fontFamily
                 bold: true
                 pixelSize: 50
             }
