@@ -2,6 +2,7 @@
 #include <QCryptographicHash>
 #include <QRunnable>
 #include <QThreadPool>
+#include <QTime>
 #include <QDebug>
 
 LabCore1::LabCore1(QObject *parent)
@@ -75,14 +76,14 @@ class LabCore1::RestoreTask : public QRunnable {
         const int progressPoint = totalIters * core->progressStep;
         int progress = 0;
         targetHash.remove('\n');
-
+        int msStart = QTime::currentTime().msec();
         for (int keyLen = 1; keyLen<= 7; ++keyLen) {
             std::string key(keyLen, '0');
             std::string lastKey(keyLen, '9');
             while (key != lastKey) {
                 QString iterHash = core->hash(mode, QString::fromStdString(key));
                 if (iterHash == targetHash) {
-                    emit core->keyFound(QString::fromStdString(key));
+                    emit core->keyFound(QString::fromStdString(key), QTime::currentTime().msec() - msStart);
                     return;
                 }
                 ++progress;
@@ -96,6 +97,7 @@ class LabCore1::RestoreTask : public QRunnable {
                 }
             }
         }
+        emit core->keyFound("", 0);
     }
 
 public:

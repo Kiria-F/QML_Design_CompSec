@@ -17,9 +17,7 @@ public:
 
 signals:
     void progressChanged(float progress);
-    void keyFound(QString key);
-
-signals:
+    void keyFound(QString key, int ms);
 };
 
 #endif // LABCORE1_H

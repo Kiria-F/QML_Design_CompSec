@@ -8,6 +8,7 @@ Item {
     function show(text) {
         popUpText.text = text
         popUpAnimation.restart()
+        popUpMA.enabled = true
     }
 
     Rectangle {
@@ -20,6 +21,8 @@ Item {
         color: "white"
 
         MouseArea {
+            id: popUpMA
+            enabled: false
             anchors.fill: parent
             onClicked: {
                 popUpAnimation.stop()
@@ -66,6 +69,38 @@ Item {
             duration: 1500
         }
 
+        SequentialAnimation {
+
+            ParallelAnimation {
+
+                PropertyAnimation {
+                    target: popUpRect
+                    property: "sizeMod"
+                    to: 0.9
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+
+                PropertyAnimation {
+                    target: popUp
+                    property: "opacity"
+                    to: 0
+                    duration: 300
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            PropertyAction {
+                target: popUpMA
+                property: "enabled"
+                value: false
+            }
+        }
+    }
+
+    SequentialAnimation {
+        id: popUpHideAnimation
+
         ParallelAnimation {
 
             PropertyAnimation {
@@ -84,25 +119,11 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
-    }
 
-    ParallelAnimation {
-        id: popUpHideAnimation
-
-        PropertyAnimation {
-            target: popUpRect
-            property: "sizeMod"
-            to: 0.9
-            duration: 300
-            easing.type: Easing.InOutQuad
-        }
-
-        PropertyAnimation {
-            target: popUp
-            property: "opacity"
-            to: 0
-            duration: 300
-            easing.type: Easing.InOutQuad
+        PropertyAction {
+            target: popUpMA
+            property: "enabled"
+            value: false
         }
     }
 
