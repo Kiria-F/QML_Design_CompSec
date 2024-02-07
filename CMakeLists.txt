@@ -15,6 +15,7 @@ qt_add_executable(appComputerSecurityLabs
 qt_add_qml_module(appComputerSecurityLabs
     URI ComputerSecurityLabs
     VERSION 1.0
+    SOURCES constants.h
     SOURCES labcore1.h labcore1.cpp
     SOURCES geometry.h geometry.cpp
     SOURCES
@@ -28,7 +29,7 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES LoaderPlug.qml
     QML_FILES WButton.qml
     QML_FILES WStateButton.qml
-    SOURCES constants.h
+    QML_FILES PopUp.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

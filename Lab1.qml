@@ -104,6 +104,10 @@ Item {
             }
         ]
 
+        onStateChanged: {
+            hashFieldText.text = ""
+        }
+
         transitions: [
             Transition {
                 NumberAnimation {
@@ -212,7 +216,24 @@ Item {
         z: 1
         text: "Hash"
         onClicked: {
-            hashFieldText.text = labCore1.hash(hashField.state, keyFieldText.text)
+            if (keyFieldText.text.length === 0) {
+                popUp.show("You should enter\na key first")
+            } else if (hashField.state === "") {
+                popUp.show("Choose a hash method")
+            } else {
+                hashFieldText.text = labCore1.hash(hashField.state, keyFieldText.text)
+            }
+        }
+    }
+
+    WButton {
+        id: restoreBtn
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: bar.i + ars.w / 2 - 10
+        z: 1
+        text: "Restore"
+        onClicked: {
+            popUp.show("Not now")
         }
     }
 
@@ -308,6 +329,11 @@ Item {
             PathLine { relativeX: 0; y: bar.by + ars.br }
             PathArc { relativeX: ars.br; relativeY: -ars.br; radiusX: ars.br; radiusY: ars.br; }
         }
+    }
+
+    PopUp {
+        id: popUp
+        anchors.centerIn: parent
     }
 
     Shape {
