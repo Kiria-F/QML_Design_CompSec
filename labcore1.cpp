@@ -76,14 +76,14 @@ class LabCore1::RestoreTask : public QRunnable {
         const int progressPoint = totalIters * core->progressStep;
         int progress = 0;
         targetHash.remove('\n');
-        int msStart = QTime::currentTime().msec();
+        int msStart = QTime::currentTime().msecsSinceStartOfDay();
         for (int keyLen = 1; keyLen<= 7; ++keyLen) {
             std::string key(keyLen, '0');
             std::string lastKey(keyLen, '9');
             while (key != lastKey) {
                 QString iterHash = core->hash(mode, QString::fromStdString(key));
                 if (iterHash == targetHash) {
-                    emit core->keyFound(QString::fromStdString(key), QTime::currentTime().msec() - msStart);
+                    emit core->keyFound(QString::fromStdString(key), QTime::currentTime().msecsSinceStartOfDay() - msStart);
                     return;
                 }
                 ++progress;

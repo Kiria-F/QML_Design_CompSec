@@ -14,9 +14,10 @@ Item {
             progressBar.progress = progress
         }
 
-        function onKeyFound(key) {
+        function onKeyFound(key, ms) {
             progressBar.progress = 0
             keyFieldText.text = key
+            timeText.text = ms + " ms"
         }
     }
 
@@ -280,6 +281,17 @@ Item {
             width: parent.width * progress
             radius: height / 2
             color: "#bbbbff"
+        }
+    }
+
+    TextEdit {
+        id: timeText
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: (parent.height + bar.o) / 2 - contentHeight / 2
+        color: constants.strongTextColor
+        font {
+            family: constants.fontFamily
+            pixelSize: 20
         }
     }
 
