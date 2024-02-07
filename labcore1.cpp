@@ -1,5 +1,6 @@
 #include "labcore1.h"
 #include <QCryptographicHash>
+#include <QDebug>
 
 LabCore1::LabCore1(QObject *parent)
     : QObject{parent}
@@ -59,4 +60,32 @@ QString LabCore1::hash(QString mode, QString key) {
         strHash.append(byteSigns[b & 0x0f]);
     }
     return strHash;
+}
+
+QString LabCore1::restore(QString mode, QString targetHash) {
+    const char overflowChar = '9' + 1;
+    const int totalIters = 11111110;
+    const int progressPoint = totalIters * progressStep;
+    int progress = 0;
+    targetHash.remove('\n');
+    for (int keyLen = 1; keyLen<= 7; ++keyLen) {
+        std::string key(keyLen, '0');
+        std::string lastKey(keyLen, '9');
+        while (key != lastKey) {
+            QString iterHash = hash(mode, QString::fromStdString(key));
+            if (iterHash == targetHash) {
+                return QString::fromStdString(key);
+            }
+            ++progress;
+            if (progress % progressPoint == 0) {
+                emit progressChanged((float) progress / totalIters);
+            }
+            ++key[key.size() - 1];
+            for (int i = key.size() - 1; i >= 0 && key[i] == overflowChar; --i) {
+                key[i] = '0';
+                ++key[i - 1];
+            }
+        }
+    }
+    return "";
 }

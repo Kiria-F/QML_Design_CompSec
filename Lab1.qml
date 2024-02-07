@@ -233,7 +233,51 @@ Item {
         z: 1
         text: "Restore"
         onClicked: {
-            popUp.show("Not now")
+            if (hashFieldText.text.length === 0) {
+                popUp.show("You should enter\na hash first")
+            } else if (hashField.state === "") {
+                popUp.show("Choose a hash method")
+            } else {
+                keyFieldText.text = labCore1.restore(hashField.state, hashFieldText.text)
+            }
+        }
+    }
+
+    Rectangle {
+        id: progressBarBorder
+        z: 2
+        anchors {
+            horizontalCenter: restoreBtn.horizontalCenter
+            top: restoreBtn.bottom
+            topMargin: 10
+        }
+        width: 300
+        height: 6
+        radius: 3
+        border {
+            color: constants.weakTextColor
+            width: 1
+        }
+
+        Rectangle {
+            id: progressBar
+            property real progress: 0
+            z: 1
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+            height: parent.height
+            width: parent.width * progress
+            radius: height / 2
+            color: "#bbbbff"
+
+            Connections {
+                target: labCore1
+                function onProgressChanged(progress) {
+                    progressBar.progress = progress
+                }
+            }
         }
     }
 
