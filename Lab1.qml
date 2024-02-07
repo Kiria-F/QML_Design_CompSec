@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Effects
 import QtQuick.Controls
-import "."
 
 Item {
     id: lab1
@@ -17,7 +16,11 @@ Item {
         function onKeyFound(key, ms) {
             progressBar.progress = 0
             keyFieldText.text = key
-            timeText.text = ms + " ms"
+            if (ms >= 0) {
+                timeText.text = ms + " ms"
+            } else {
+                timeText.text = "Not Found"
+            }
         }
     }
 

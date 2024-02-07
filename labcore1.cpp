@@ -97,7 +97,7 @@ class LabCore1::RestoreTask : public QRunnable {
                 }
             }
         }
-        emit core->keyFound("", 0);
+        emit core->keyFound("", -1);
     }
 
 public:
