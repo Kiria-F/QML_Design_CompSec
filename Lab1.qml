@@ -7,6 +7,19 @@ import "."
 Item {
     id: lab1
 
+    Connections {
+        target: labCore1
+
+        function onProgressChanged(progress) {
+            progressBar.progress = progress
+        }
+
+        function onKeyFound(key) {
+            progressBar.progress = 0
+            keyFieldText.text = key
+        }
+    }
+
     Rectangle {
         id: keyField
         height: 40
@@ -26,8 +39,8 @@ Item {
             id: keyFieldText
             anchors {
                 fill: parent
-                topMargin: 6
-                bottomMargin: 6
+                topMargin: 7
+                bottomMargin: 7
                 leftMargin: 8
                 rightMargin: 8
             }
@@ -103,10 +116,6 @@ Item {
                 }
             }
         ]
-
-        onStateChanged: {
-            hashFieldText.text = ""
-        }
 
         transitions: [
             Transition {
@@ -238,7 +247,7 @@ Item {
             } else if (hashField.state === "") {
                 popUp.show("Choose a hash method")
             } else {
-                keyFieldText.text = labCore1.restore(hashField.state, hashFieldText.text)
+                labCore1.restore(hashField.state, hashFieldText.text)
             }
         }
     }
@@ -271,13 +280,6 @@ Item {
             width: parent.width * progress
             radius: height / 2
             color: "#bbbbff"
-
-            Connections {
-                target: labCore1
-                function onProgressChanged(progress) {
-                    progressBar.progress = progress
-                }
-            }
         }
     }
 

@@ -21,7 +21,7 @@ Window {
         shadowBlur: 0.5
         shadowScale: 1
         shadowColor: 'black'
-        shadowOpacity: 0.1
+        shadowOpacity: 0.3
         shadowVerticalOffset: 3
     }
 
@@ -89,10 +89,10 @@ Window {
                         onEntered: {
                             topBarSelection.width = topBarSelection.height
                             topBarSelection.x = topBarRowMA.mapToGlobal(0, 0).x + width / 2 - topBarSelection.height / 2
-                            topBarNumber.color = "#222"
+                            topBarNumber.color = constants.strongTextColor
                         }
                         onExited: {
-                            topBarNumber.color = topBarNumber.defaultColor
+                            topBarNumber.color = constants.weakTextColor
                         }
                         onClicked: {
                             data.clickedButton = this
@@ -105,9 +105,8 @@ Window {
                             property int defaultY: (parent.height - height) / 2
                             y: defaultY
                             anchors.horizontalCenter: parent.horizontalCenter
-                            property string defaultColor: "#aaa"
 
-                            color: defaultColor
+                            color: constants.weakTextColor
                             font {
                                 family: constants.fontFamily
                                 bold: true
@@ -140,7 +139,7 @@ Window {
                                 NumberAnimation {
                                     target: topBarShadow
                                     property: "shadowOpacity"
-                                    to: 0.3
+                                    to: 0.5
                                     duration: 200
                                     easing.type: Easing.InOutQuad
                                 }
@@ -191,7 +190,7 @@ Window {
                                 NumberAnimation {
                                     target: topBarShadow
                                     property: "shadowOpacity"
-                                    to: 0.1
+                                    to: 0.3
                                     duration: 200
                                     easing.type: Easing.InOutQuad
                                 }
@@ -229,9 +228,12 @@ Window {
 
     Rectangle {
         id: labContainer
-        width: parent.width
+        width: Math.min(parent.width, 1000)
         height: parent.height - topBar.height - 20
-        anchors.bottom: parent.bottom
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
         color: "transparent"
 
         StackView {

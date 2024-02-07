@@ -1,5 +1,7 @@
 #include "labcore1.h"
 #include <QCryptographicHash>
+#include <QRunnable>
+#include <QThreadPool>
 #include <QDebug>
 
 LabCore1::LabCore1(QObject *parent)
@@ -21,14 +23,14 @@ QString LabCore1::validateKey(QString key) {
 
 QString LabCore1::validateHash(QString hashType, QString hash) {
     int hashSize = 0;
-    if (hashType == "MD5")
-        hashSize = 32 + 1;
-    else if (hashType == "SHA1")
+    if (hashType == "SHA1")
         hashSize = 40 + 2;
     else if (hashType == "SHA256")
         hashSize = 64 + 3;
     else if (hashType == "SHA512")
         hashSize = 128 + 7;
+    else  // MD5 & <Empty>
+        hashSize = 32 + 1;
 
     for (int i = 0; i < hash.size() && i < hashSize; ++i) {
         if ((i + 1) % 17 == 0 && i > 0) {
@@ -62,30 +64,46 @@ QString LabCore1::hash(QString mode, QString key) {
     return strHash;
 }
 
-QString LabCore1::restore(QString mode, QString targetHash) {
-    const char overflowChar = '9' + 1;
-    const int totalIters = 11111110;
-    const int progressPoint = totalIters * progressStep;
-    int progress = 0;
-    targetHash.remove('\n');
-    for (int keyLen = 1; keyLen<= 7; ++keyLen) {
-        std::string key(keyLen, '0');
-        std::string lastKey(keyLen, '9');
-        while (key != lastKey) {
-            QString iterHash = hash(mode, QString::fromStdString(key));
-            if (iterHash == targetHash) {
-                return QString::fromStdString(key);
-            }
-            ++progress;
-            if (progress % progressPoint == 0) {
-                emit progressChanged((float) progress / totalIters);
-            }
-            ++key[key.size() - 1];
-            for (int i = key.size() - 1; i >= 0 && key[i] == overflowChar; --i) {
-                key[i] = '0';
-                ++key[i - 1];
+class LabCore1::RestoreTask : public QRunnable {
+    LabCore1* core;
+    QString mode;
+    QString targetHash;
+
+    void run() override {
+        const char overflowChar = '9' + 1;
+        const int totalIters = 11111110;
+        const int progressPoint = totalIters * core->progressStep;
+        int progress = 0;
+        targetHash.remove('\n');
+
+        for (int keyLen = 1; keyLen<= 7; ++keyLen) {
+            std::string key(keyLen, '0');
+            std::string lastKey(keyLen, '9');
+            while (key != lastKey) {
+                QString iterHash = core->hash(mode, QString::fromStdString(key));
+                if (iterHash == targetHash) {
+                    emit core->keyFound(QString::fromStdString(key));
+                    return;
+                }
+                ++progress;
+                if (progress % progressPoint == 0) {
+                    emit core->progressChanged((float) progress / totalIters);
+                }
+                ++key[key.size() - 1];
+                for (int i = key.size() - 1; i >= 0 && key[i] == overflowChar; --i) {
+                    key[i] = '0';
+                    ++key[i - 1];
+                }
             }
         }
     }
-    return "";
+
+public:
+
+    RestoreTask(LabCore1* core, QString mode, QString targetHash) : core(core), mode(mode), targetHash(targetHash) {}
+};
+
+void LabCore1::restore(QString mode, QString targetHash) {
+    auto task = new RestoreTask(this, mode, targetHash);
+    QThreadPool::globalInstance()->start(task);
 }

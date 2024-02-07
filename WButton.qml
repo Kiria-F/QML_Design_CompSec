@@ -44,7 +44,7 @@ Item {
             y: defaultY
             anchors.horizontalCenter: parent.horizontalCenter
             text: wButton.text
-            color: constants.weakTextColor
+            color: constants.strongTextColor
             font {
                 pixelSize: 20
                 family: constants.fontFamily
