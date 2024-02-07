@@ -19,6 +19,14 @@ Item {
         height: 200 * sizeMod
         color: "white"
 
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                popUpAnimation.stop()
+                popUpHideAnimation.start()
+            }
+        }
+
         Text {
             id: popUpText
             anchors.centerIn: parent
@@ -75,6 +83,26 @@ Item {
                 duration: 300
                 easing.type: Easing.InOutQuad
             }
+        }
+    }
+
+    ParallelAnimation {
+        id: popUpHideAnimation
+
+        PropertyAnimation {
+            target: popUpRect
+            property: "sizeMod"
+            to: 0.9
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+
+        PropertyAnimation {
+            target: popUp
+            property: "opacity"
+            to: 0
+            duration: 300
+            easing.type: Easing.InOutQuad
         }
     }
 
