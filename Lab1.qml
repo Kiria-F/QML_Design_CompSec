@@ -15,7 +15,7 @@ Item {
 
         function onKeyFound(key, ms) {
             progressBar.progress = 0
-            keyFieldText.text = key
+            keyField.text = key
             if (ms >= 0) {
                 timeText.text = ms + " ms"
             } else {
@@ -43,85 +43,59 @@ Item {
         }
     }
 
-    Rectangle {
+    WTextField {
         id: hashField
-        property real linesCount: 2
-        width: 7 * 16 - 2 + anchors.leftMargin + anchors.rightMargin
-        height: 28 * linesCount + 9 + anchors.topMargin + anchors.bottomMargin
-        radius: 20
+        lines: 2
+        length: 16
         anchors {
             right: parent.right
             rightMargin: 100
             verticalCenter: parent.verticalCenter
         }
-        border {
-            width: 2
-            color: constants.strongTextColor
-        }
-
         states: [
             State {
                 name: "MD5"
                 PropertyChanges {
                     target: hashField
-                    linesCount: 2
+                    lines: 2
                 }
             },
             State {
                 name: "SHA1"
                 PropertyChanges {
                     target: hashField
-                    linesCount: 3
+                    lines: 3
                 }
             },
             State {
                 name: "SHA256"
                 PropertyChanges {
                     target: hashField
-                    linesCount: 4
+                    lines: 4
                 }
             },
             State {
                 name: "SHA512"
                 PropertyChanges {
                     target: hashField
-                    linesCount: 8
+                    lines: 8
                 }
             }
         ]
-
         transitions: [
             Transition {
                 NumberAnimation {
-                    property: "linesCount"
+                    property: "lines"
                     easing.type: Easing.InOutQuad
                     duration: 400
                 }
             }
         ]
-
-        TextEdit {
-            id: hashFieldText
-            anchors {
-                fill: parent
-                topMargin: 6
-                bottomMargin: 6
-                leftMargin: 8
-                rightMargin: 8
-            }
-            color: constants.strongTextColor
-            font {
-                family: "JetBrainsMono Nerd Font"
-                bold: true
-                pixelSize: 20
-            }
-            inputMethodHints: Qt.ImhNone
-            onTextChanged: {
-                let pos = cursorPosition
-                let aLen = text.length;
-                text = labCore1.validateHash(hashField.state, text);
-                cursorPosition = pos - (aLen - text.length)
-            }
+        onTextChanged: {
+            let pos = cursorPosition
+            let aLen = text.length;
+            text = labCore1.validateHash(hashField.state, text);
+            cursorPosition = pos - (aLen - text.length)
         }
     }
 
@@ -131,7 +105,7 @@ Item {
         anchors.centerIn: parent
 
         function commonHandler() {
-            hashFieldText.text = labCore1.validateHash(hashField.state, hashFieldText.text);
+            hashField.text = labCore1.validateHash(hashField.state, hashField.text);
         }
 
         Row {
@@ -198,12 +172,12 @@ Item {
         z: 1
         text: "Hash"
         onClicked: {
-            if (keyFieldText.text.length === 0) {
+            if (keyField.text.length === 0) {
                 popUp.show("You should enter\na key first")
             } else if (hashField.state === "") {
                 popUp.show("Choose a hash method")
             } else {
-                hashFieldText.text = labCore1.hash(hashField.state, keyFieldText.text)
+                hashField.text = labCore1.hash(hashField.state, keyField.text)
             }
         }
     }
@@ -215,12 +189,12 @@ Item {
         z: 1
         text: "Restore"
         onClicked: {
-            if (hashFieldText.text.length === 0) {
+            if (hashField.text.length === 0) {
                 popUp.show("You should enter\na hash first")
             } else if (hashField.state === "") {
                 popUp.show("Choose a hash method")
             } else {
-                labCore1.restore(hashField.state, hashFieldText.text)
+                labCore1.restore(hashField.state, hashField.text)
             }
         }
     }

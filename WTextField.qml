@@ -6,10 +6,10 @@ Item {
     property string placeholder
     property alias text: wTextFieldText.text
     property alias cursorPosition: wTextFieldText.cursorPosition
-    property int lines: 1
-    property int length: 10
+    property real lines: 1
+    property real length: 10
     property alias horizontalAlignment: wTextFieldText.horizontalAlignment
-    height: lines * 40
+    height: lines * 26 + 14
     width: length * 12 + 20
 
     Component.onCompleted: {
@@ -19,7 +19,7 @@ Item {
     Rectangle {
         id: wTextFieldBorder
         anchors.fill: parent
-        radius: height / 2
+        radius: constants.radius
         border {
             width: 2
             color: constants.strongTextColor
@@ -31,8 +31,9 @@ Item {
                 fill: parent
                 topMargin: 7
                 bottomMargin: 7
+                leftMargin: 10
+                rightMargin: 10
             }
-            horizontalAlignment: TextEdit.AlignHCenter
             color: constants.strongTextColor
             font {
                 family: constants.fontFamily
