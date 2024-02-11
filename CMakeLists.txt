@@ -18,6 +18,7 @@ qt_add_qml_module(appComputerSecurityLabs
     SOURCES constants.h
     SOURCES labcore1.h labcore1.cpp
     SOURCES geometry.h geometry.cpp
+    SOURCES labcore2.h labcore2.cpp
     SOURCES
     QML_FILES
     QML_FILES Main.qml
@@ -30,6 +31,7 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES WButton.qml
     QML_FILES WStateButton.qml
     QML_FILES PopUp.qml
+    QML_FILES WTextField.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -45,6 +47,7 @@ set_target_properties(appComputerSecurityLabs PROPERTIES
 
 target_link_libraries(appComputerSecurityLabs
     PRIVATE Qt6::Quick
+    PRIVATE /home/f/Qt/6.6.1/gcc_64/lib/libqca-qt6.so
 )
 
 include(GNUInstallDirs)

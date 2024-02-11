@@ -3,10 +3,14 @@ import QtQuick.Effects
 
 Item {
     id: wButton
-    property string text
+    property alias text: wButtonText.text
     height: 40
     width: 100
     signal clicked(var mouse)
+
+    Component.onCompleted: {
+        wButtonMA.clicked.connect(clicked)
+    }
 
     Rectangle {
         id: wButtonRect
@@ -34,16 +38,11 @@ Item {
             }
         }
 
-        Component.onCompleted: {
-            wButtonMA.clicked.connect(clicked)
-        }
-
         Text {
             id: wButtonText
             property real defaultY: (parent.height - height) / 2
             y: defaultY
             anchors.horizontalCenter: parent.horizontalCenter
-            text: wButton.text
             color: constants.strongTextColor
             font {
                 pixelSize: 20

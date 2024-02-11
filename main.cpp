@@ -1,12 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <Qca-qt6/QtCrypto/QtCrypto>
 #include "geometry.h"
 #include "labcore1.h"
 #include "constants.h"
 
 int main(int argc, char *argv[])
 {
+    QCA::Initializer qcaInit;
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

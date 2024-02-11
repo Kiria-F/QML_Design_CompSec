@@ -1,15 +1,17 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
-    Text {
-        anchors.centerIn: parent
+    Column {
+        spacing: 5
 
-        text: "Coming soon"
-        opacity: 0.2
-        font {
-            family: "monospace"
-            bold: true
-            pixelSize: 50
+        Repeater {
+            model: 9
+
+            WTextField {
+                length: index + 1
+                placeholder: "0".repeat(index + 1)
+            }
         }
     }
 }

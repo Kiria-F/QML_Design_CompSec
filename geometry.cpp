@@ -10,12 +10,6 @@ Geometry::Geometry(QObject *parent)
 {}
 
 ArcConnectResult Geometry::arcConnect(float r, float ax, float ay, float bx, float by, float cx, float cy) const {
-    if (std::isnan(ax)) qDebug() << "ax is NaN";
-    if (std::isnan(ay)) qDebug() << "ay is NaN";
-    if (std::isnan(bx)) qDebug() << "bx is NaN";
-    if (std::isnan(by)) qDebug() << "by is NaN";
-    if (std::isnan(cx)) qDebug() << "cx is NaN";
-    if (std::isnan(cy)) qDebug() << "cy is NaN";
     float v1x = ax - bx;
     float v1y = ay - by;
     float v2x = cx - bx;

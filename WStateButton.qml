@@ -3,19 +3,23 @@ import QtQuick.Effects
 
 Item {
     id: wButton
-    property string text
+    property alias text: wButtonText.text
     property bool pressed
     height: 40
     width: 100
     signal clicked(var mouse)
-    signal released()
+    signal released
     function release() {
         if (pressed) {
             wButtonReleaseAnimation.restart()
             wButtonMA.hoverEnabled = true
-            wButton.released()
             wButton.pressed = false
+            wButton.released()
         }
+    }
+
+    Component.onCompleted: {
+        wButtonMA.clicked.connect(clicked)
     }
 
     Rectangle {
@@ -48,17 +52,11 @@ Item {
             }
         }
 
-        Component.onCompleted: {
-            wButtonMA.clicked.connect(clicked)
-            // wButton.released.connect(release)
-        }
-
         Text {
             id: wButtonText
             property real defaultY: (parent.height - height) / 2
             y: defaultY
             anchors.horizontalCenter: parent.horizontalCenter
-            text: wButton.text
             color: constants.weakTextColor
             font {
                 pixelSize: 20

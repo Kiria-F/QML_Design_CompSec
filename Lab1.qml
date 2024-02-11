@@ -24,53 +24,22 @@ Item {
         }
     }
 
-    Rectangle {
+    WTextField {
         id: keyField
-        height: 40
-        width: 100
-        radius: height / 2
+        lines: 1
+        length: 7
         anchors {
             left: parent.left
             leftMargin: 100
             verticalCenter: parent.verticalCenter
         }
-        border {
-            width: 2
-            color: constants.strongTextColor
-        }
-
-        TextEdit {
-            id: keyFieldText
-            anchors {
-                fill: parent
-                topMargin: 7
-                bottomMargin: 7
-                leftMargin: 8
-                rightMargin: 8
-            }
-            horizontalAlignment: TextEdit.AlignHCenter
-            color: constants.strongTextColor
-            font {
-                family: constants.fontFamily
-                bold: true
-                pixelSize: 20
-            }
-            onTextChanged: {
-                let pos = cursorPosition
-                let aLen = text.length;
-                text = labCore1.validateKey(text);
-                cursorPosition = pos - (aLen - text.length)
-            }
-
-            PlaceholderText {
-                text: keyFieldText.text.length === 0 ? "0000000" : ""
-                color: constants.weakTextColor
-                font {
-                    family: constants.fontFamily
-                    bold: true
-                    pixelSize: 20
-                }
-            }
+        placeholder: "0000000"
+        horizontalAlignment: TextEdit.AlignHCenter
+        onTextChanged: {
+            let pos = cursorPosition
+            let aLen = text.length;
+            text = labCore1.validateKey(text);
+            cursorPosition = pos - (aLen - text.length)
         }
     }
 
