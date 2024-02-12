@@ -50,7 +50,6 @@ Item {
                 wButton.pressed = true
                 wButtonClickAnimation.restart()
                 hoverEnabled = false
-                // wButton.group.foreach((btn) => btn.release())
                 for (var i = 0; i < wButton.group.length; ++i) {
                     wButton.group[i].release()
                 }

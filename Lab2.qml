@@ -4,12 +4,9 @@ Item {
     Text {
         anchors.centerIn: parent
 
-        text: "Coming soon"
-        opacity: 0.2
-        font {
-            family: "monospace"
-            bold: true
-            pixelSize: 50
+        WPlatform {
+            width: 100
+            height: 100
         }
     }
 }
