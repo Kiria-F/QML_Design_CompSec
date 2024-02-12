@@ -114,10 +114,8 @@ Item {
             WStateButton {
                 id: btnMD5
                 text: "MD5"
+                group: [btnSHA1, btnSHA256, btnSHA512]
                 onClicked: {
-                    btnSHA1.release()
-                    btnSHA256.release()
-                    btnSHA512.release()
                     hashField.state = "MD5"
                     buttonsContainer.commonHandler()
                 }
@@ -126,10 +124,8 @@ Item {
             WStateButton {
                 id: btnSHA1
                 text: "SHA1"
+                group: [btnMD5, btnSHA256, btnSHA512]
                 onClicked: {
-                    btnMD5.release()
-                    btnSHA256.release()
-                    btnSHA512.release()
                     hashField.state = "SHA1"
                     buttonsContainer.commonHandler()
                 }
@@ -142,10 +138,8 @@ Item {
             WStateButton {
                 id: btnSHA256
                 text: "SHA256"
+                group: [btnMD5, btnSHA1, btnSHA512]
                 onClicked: {
-                    btnMD5.release()
-                    btnSHA1.release()
-                    btnSHA512.release()
                     hashField.state = "SHA256"
                     buttonsContainer.commonHandler()
                 }
@@ -154,10 +148,8 @@ Item {
             WStateButton {
                 id: btnSHA512
                 text: "SHA512"
+                group: [btnMD5, btnSHA1, btnSHA256]
                 onClicked: {
-                    btnMD5.release()
-                    btnSHA1.release()
-                    btnSHA256.release()
                     hashField.state = "SHA512"
                     buttonsContainer.commonHandler()
                 }

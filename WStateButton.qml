@@ -5,6 +5,7 @@ Item {
     id: wButton
     property alias text: wButtonText.text
     property bool pressed
+    property list<var> group
     height: 40
     width: 100
     signal clicked(var mouse)
@@ -49,6 +50,10 @@ Item {
                 wButton.pressed = true
                 wButtonClickAnimation.restart()
                 hoverEnabled = false
+                // wButton.group.foreach((btn) => btn.release())
+                for (var i = 0; i < wButton.group.length; ++i) {
+                    wButton.group[i].release()
+                }
             }
         }
 
