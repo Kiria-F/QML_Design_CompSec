@@ -1,5 +1,4 @@
 #include "labcore2.h"
-#include "tools.h"
 #include <Qca-qt6/QtCrypto/QtCrypto>
 #include <QDebug>
 
@@ -7,55 +6,57 @@ LabCore2::LabCore2(QObject *parent)
     : QObject{parent}
 {}
 
-QString LabCore2::encrypt(QString modeStr, QString paddingModeStr, QString initVectorStr, QString text, QString keyStr) {
+QString LabCore2::process(QString modeStr, QString paddingModeStr, QString initVectorStr, QString keyStr, QString textStr, QString directionStr) {
     QCA::Cipher::Mode mode;
     if (modeStr == "ECB") mode = QCA::Cipher::ECB;
-    else return "";
+    else {
+        qWarning() << "INCORRECT MODE";
+        return "";
+    }
     QCA::Cipher::Padding paddingMode;
     if (paddingModeStr == "ZEROS") paddingMode = QCA::Cipher::NoPadding;
-    else return "";
+    else {
+        qWarning() << "INCORRECT PADDING";
+        return "";
+    }
+    QCA::InitializationVector initVector(QCA::hexToArray(initVectorStr));
+    QCA::SymmetricKey key(QCA::hexToArray(keyStr));
+    QByteArray text = textStr.toLatin1();
+    QCA::Direction direction;
+    if (directionStr == "ENCRYPT") direction = QCA::Encode;
+    else if (directionStr == "DECRYPT") direction = QCA::Decode;
+    else {
+        qWarning() << "INCORRECT DIRECTION";
+        return "";
+    }
 
-    // auto t = Tools::str2qba(keyStr);
-    // qDebug() << keyStr << " -> " << QCA::arrayToHex(t) << " -> " << Tools::qba2str(t);
+    // auto t = QCA::hexToArray(keyStr);
+    // qDebug() << keyStr << " -> " << QCA::arrayToHex(t) << " -> " << QCA::arrayToHex(t);
     // return "";
 
-    QCA::InitializationVector initVector(Tools::str2qba(initVectorStr));
-    QCA::SymmetricKey key(Tools::str2qba(keyStr));
     char setup[] = "tripledes-ecb";
     if (!QCA::isSupported(setup)) {
         qDebug() << setup << "is not supported";
         return "";
-    } else {
-        qDebug() << setup << "is supported";
     }
     QCA::Cipher cipher("tripledes",
                        mode,
                        paddingMode,
-                       QCA::Encode,
+                       direction,
                        key,
                        initVector);
-    qDebug() << "Cipher is created";
 
-    QCA::SecureArray u = cipher.update(text.toLocal8Bit());
-    qDebug() << "UPD HEX: " << QCA::arrayToHex(u.toByteArray());
-
-    if (cipher.ok()) {
-        qDebug() << "Update ok";
-    } else {
+    QCA::SecureArray codeBody = cipher.update(text);
+    if (!cipher.ok()) {
         qDebug() << "Update failed";
     }
 
-    QCA::SecureArray f = cipher.final();
-
-    if (cipher.ok()) {
-        qDebug() << "Final ok";
-    } else {
+    QCA::SecureArray codeTail = cipher.final();
+    if (!cipher.ok()) {
         qDebug() << "Final failed";
     }
 
-    qDebug() << "FIN HEX: " << QCA::arrayToHex(f.toByteArray());
-
-    return "";
+    return QCA::arrayToHex((codeBody.append(codeTail)).toByteArray());
 }
 
 void we();
@@ -65,11 +66,10 @@ void LabCore2::test() {
     if (gowe) {
         we();
     } else {
-    qDebug() << encrypt("ECB",
-                        "ZEROS",
-                        "2020202020202020",
-                        "0123456789abcde7",
-                        "0123456789abcdeffedcba9876543210");
+        QString text = "0123456789abcde7";
+        QString textEnc = process("ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
+        QString textEncDec = process("ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
+        qDebug() << text << "->" << textEnc << "->" << textEncDec;
 
     qDebug() << "7F1DDA77826F8AFF";
     }
