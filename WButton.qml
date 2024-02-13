@@ -45,7 +45,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             color: constants.strongTextColor
             font {
-                pixelSize: 20
+                pixelSize: constants.fontSize
                 family: constants.fontFamily
                 bold: true
             }

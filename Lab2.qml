@@ -4,9 +4,10 @@ Item {
     Text {
         anchors.centerIn: parent
 
-        WPlatform {
-            width: 100
-            height: 100
+        WButton {
+            onClicked: {
+                labCore2.test()
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ Item {
             font {
                 family: constants.fontFamily
                 bold: true
-                pixelSize: 20
+                pixelSize: constants.fontSize
             }
 
             PlaceholderText {
@@ -49,7 +49,7 @@ Item {
                 font {
                     family: constants.fontFamily
                     bold: true
-                    pixelSize: 20
+                    pixelSize: constants.fontSize
                 }
             }
         }

@@ -229,7 +229,7 @@ Item {
         color: constants.strongTextColor
         font {
             family: constants.fontFamily
-            pixelSize: 20
+            pixelSize: constants.fontSize
         }
     }
 

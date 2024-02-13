@@ -51,7 +51,7 @@ target_link_libraries(appComputerSecurityLabs
     PRIVATE Qt6::Quick
     PRIVATE /home/f/Qt/6.6.1/gcc_64/lib/libqca-qt6.so
 )
-include(QtCrypto)
+
 include(GNUInstallDirs)
 install(TARGETS appComputerSecurityLabs
     BUNDLE DESTINATION .
