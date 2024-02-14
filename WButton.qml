@@ -3,9 +3,10 @@ import QtQuick.Effects
 
 Item {
     id: wButton
-    property alias text: wButtonText.text
     height: 40
     width: 100
+    property alias text: wButtonText.text
+    property color color: "white"
     signal clicked(var mouse)
 
     Component.onCompleted: {
@@ -15,7 +16,7 @@ Item {
     Rectangle {
         id: wButtonRect
         y: 0
-        color: "#ffffff"
+        color: wButton.color
         height: wButton.height
         width: wButton.width
         radius: height / 2
@@ -91,8 +92,24 @@ Item {
 
             PropertyAnimation {
                 target: wButtonRect
-                property: "color"
-                to: "#fafafa"
+                property: "color.r"
+                to: wButton.color.r * 0.98
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+
+            PropertyAnimation {
+                target: wButtonRect
+                property: "color.g"
+                to: wButton.color.g * 0.98
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+
+            PropertyAnimation {
+                target: wButtonRect
+                property: "color.b"
+                to: wButton.color.b * 0.98
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
@@ -143,8 +160,24 @@ Item {
 
             PropertyAnimation {
                 target: wButtonRect
-                property: "color"
-                to: "#ffffff"
+                property: "color.r"
+                to: wButton.color.r
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+
+            PropertyAnimation {
+                target: wButtonRect
+                property: "color.g"
+                to: wButton.color.g
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+
+            PropertyAnimation {
+                target: wButtonRect
+                property: "color.b"
+                to: wButton.color.b
                 duration: 200
                 easing.type: Easing.InOutQuad
             }
