@@ -7,6 +7,11 @@ Item {
     property string cipherMode
     property string cipherPadding
 
+    Component.onCompleted: {
+        labCore2.test()
+        // console.log("auto ->", labCore2.process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", "0123456789abcde7", "ENCRYPT"))
+    }
+
     Column {
         spacing: 20
         anchors.centerIn: parent
@@ -46,6 +51,7 @@ Item {
                                 id: btnDES
                                 text: "DES"
                                 group: cipherSetupTypePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherType = text
                                 }
@@ -55,6 +61,7 @@ Item {
                                 id: btn3DES
                                 text: "3DES"
                                 group: cipherSetupTypePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherType = text
                                 }
@@ -68,6 +75,7 @@ Item {
                                 id: btnAES128
                                 text: "AES128"
                                 group: cipherSetupTypePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherType = text
                                 }
@@ -77,6 +85,7 @@ Item {
                                 id: btnAES256
                                 text: "AES256"
                                 group: cipherSetupTypePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherType = text
                                 }
@@ -117,6 +126,7 @@ Item {
                                 id: btnCBC
                                 text: "CBC"
                                 group: cipherSetupModePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherMode = text
                                 }
@@ -126,6 +136,7 @@ Item {
                                 id: btnECB
                                 text: "ECB"
                                 group: cipherSetupModePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherMode = text
                                 }
@@ -139,6 +150,7 @@ Item {
                                 id: btnOFB
                                 text: "OFB"
                                 group: cipherSetupModePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherMode = text
                                 }
@@ -148,6 +160,7 @@ Item {
                                 id: btnCFB
                                 text: "CFB"
                                 group: cipherSetupModePlatform.btnGroup
+
                                 onClicked: {
                                     core.cipherMode = text
                                 }
@@ -185,6 +198,7 @@ Item {
                             id: btnZEROS
                             text: "ZEROS"
                             group: cipherSetupPaddingPlatform.btnGroup
+
                             onClicked: {
                                 core.cipherPadding = text
                             }
@@ -194,6 +208,7 @@ Item {
                             id: btnPKCS7
                             text: "PKCS7"
                             group: cipherSetupPaddingPlatform.btnGroup
+
                             onClicked: {
                                 core.cipherPadding = text
                             }
@@ -223,6 +238,7 @@ Item {
                     }
 
                     WTextField {
+                        id: vectorField
                         Layout.fillWidth: true
                     }
                 }
@@ -236,6 +252,7 @@ Item {
                     }
 
                     WTextField {
+                        id: keyField
                         Layout.fillWidth: true
                     }
                 }
@@ -314,11 +331,11 @@ Item {
 
                     WButton {
                         text: "Swap"
+
                         onClicked: {
                             cipherTextPlatform.state = 1 - cipherTextPlatform.state
-                            var t = codeField.text
-                            codeField.text = textField.text
-                            textField.text = t
+                            textField.text = codeField.text
+                            codeField.text = ""
                         }
                     }
 
@@ -327,6 +344,13 @@ Item {
                         text: "Encrypt"
                         width: 200
                         color: "#ccffaa"
+
+                        onClicked: {
+                            var dir
+                            if (cipherTextPlatform.state === "0") dir = "ENCRYPT"
+                            else dir = "DECRYPT"
+                            codeField.text = labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, dir)
+                        }
                     }
                 }
 
@@ -342,6 +366,7 @@ Item {
                     WTextField {
                         id: codeField
                         Layout.fillWidth: true
+                        readonly: true
                     }
                 }
             }

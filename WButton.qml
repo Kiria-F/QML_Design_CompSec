@@ -192,7 +192,6 @@ Item {
         }
     }
 
-
     MultiEffect {
         id: wButtonShadow
         source: wButtonRect

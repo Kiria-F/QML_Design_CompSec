@@ -9,6 +9,7 @@ Item {
     property real lines: 1
     property real length: 10
     property alias horizontalAlignment: wTextFieldText.horizontalAlignment
+    property bool readonly: false
     height: lines * 26 + 14
     width: length * 12 + 20
 
@@ -22,11 +23,12 @@ Item {
         radius: constants.radius
         border {
             width: 2
-            color: constants.strongTextColor
+            color: wTextField.readonly ? constants.weakTextColor : constants.strongTextColor
         }
 
         TextEdit {
             id: wTextFieldText
+            readOnly: wTextField.readonly
             anchors {
                 fill: parent
                 topMargin: 7
@@ -40,6 +42,7 @@ Item {
                 bold: true
                 pixelSize: constants.fontSize
             }
+            selectionColor: constants.strongTextColor
 
             PlaceholderText {
                 id: wTextFieldPlaceholder

@@ -32,7 +32,6 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
     }
     QCA::InitializationVector initVector(QCA::hexToArray(initVectorStr));
     QCA::SymmetricKey key(QCA::hexToArray(keyStr));
-    QByteArray text = QCA::hexToArray(textStr);
     QCA::Direction direction;
     if (directionStr == "ENCRYPT") direction = QCA::Encode;
     else if (directionStr == "DECRYPT") direction = QCA::Decode;
@@ -40,30 +39,39 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
         qWarning() << "INCORRECT DIRECTION";
         return "";
     }
+    QCA::SecureArray text;
+    if (!direction) text = textStr.toLatin1();
+    else text = QCA::hexToArray(textStr);
 
     QCA::Cipher cipher(type, mode, paddingMode, direction, key, initVector);
-    return QCA::arrayToHex(cipher.process(text).toByteArray());
+    // return QCA::arrayToHex((cipher.update(text).toByteArray().append(cipher.final().toByteArray())).data());
+    QByteArray result = cipher.process(text).toByteArray();
+    if (!direction) return QCA::arrayToHex(result);
+    else return QString::fromLatin1(result);
 }
 
 void we();
 
-void LabCore2::test() {
+QString LabCore2::test() {
     bool gowe = 0;
     if (gowe) {
         we();
     } else {
         QString text = "0123456789abcde7";
         QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
-        QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
+        QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", textEnc, "DECRYPT");
         qDebug() << text << "->" << textEnc << "->" << textEncDec;
 
-        text = "123456abcd";
-        textEnc = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", text, "ENCRYPT");
-        textEncDec = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", textEnc, "DECRYPT");
+        text = "hello";
+        textEnc = process("AES128", "CBC", "PKCS7", "1234567812345678", "1234abc1234abc", text, "ENCRYPT");
+        textEncDec = process("AES128", "CBC", "PKCS7", "1234567812345678", "1234abc1234abc", textEnc, "DECRYPT");
         qDebug() << text << "->" << textEnc << "->" << textEncDec;
 
         qDebug() << "7F1D0A77826F8AFF";
+
+        return textEncDec;
     }
+    return "eww";
 }
 
 void we() {
