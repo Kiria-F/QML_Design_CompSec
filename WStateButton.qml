@@ -51,7 +51,9 @@ Item {
                 wButtonClickAnimation.restart()
                 hoverEnabled = false
                 for (var i = 0; i < wButton.group.length; ++i) {
-                    wButton.group[i].release()
+                    if (group[i] !== wButton) {
+                        wButton.group[i].release()
+                    }
                 }
             }
         }

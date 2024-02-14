@@ -103,6 +103,7 @@ Item {
         id: buttonsContainer
         spacing: 10
         anchors.centerIn: parent
+        property list<var> btnGroup: [btnMD5, btnSHA1, btnSHA256, btnSHA512]
 
         function commonHandler() {
             hashField.text = labCore1.validateHash(hashField.state, hashField.text);
@@ -114,7 +115,7 @@ Item {
             WStateButton {
                 id: btnMD5
                 text: "MD5"
-                group: [btnSHA1, btnSHA256, btnSHA512]
+                group: buttonsContainer.btnGroup
                 onClicked: {
                     hashField.state = "MD5"
                     buttonsContainer.commonHandler()
@@ -124,7 +125,7 @@ Item {
             WStateButton {
                 id: btnSHA1
                 text: "SHA1"
-                group: [btnMD5, btnSHA256, btnSHA512]
+                group: buttonsContainer.btnGroup
                 onClicked: {
                     hashField.state = "SHA1"
                     buttonsContainer.commonHandler()
@@ -138,7 +139,7 @@ Item {
             WStateButton {
                 id: btnSHA256
                 text: "SHA256"
-                group: [btnMD5, btnSHA1, btnSHA512]
+                group: buttonsContainer.btnGroup
                 onClicked: {
                     hashField.state = "SHA256"
                     buttonsContainer.commonHandler()
@@ -148,7 +149,7 @@ Item {
             WStateButton {
                 id: btnSHA512
                 text: "SHA512"
-                group: [btnMD5, btnSHA1, btnSHA256]
+                group: buttonsContainer.btnGroup
                 onClicked: {
                     hashField.state = "SHA512"
                     buttonsContainer.commonHandler()

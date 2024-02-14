@@ -37,11 +37,11 @@ Item {
                         Row {
                             spacing: 10
 
-                            WButton {
+                            WStateButton {
 
                             }
 
-                            WButton {
+                            WStateButton {
 
                             }
                         }
@@ -49,11 +49,11 @@ Item {
                         Row {
                             spacing: 10
 
-                            WButton {
+                            WStateButton {
 
                             }
 
-                            WButton {
+                            WStateButton {
 
                             }
                         }
