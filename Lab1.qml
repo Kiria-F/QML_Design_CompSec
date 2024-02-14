@@ -4,7 +4,7 @@ import QtQuick.Effects
 import QtQuick.Controls
 
 Item {
-    id: lab1
+    id: core
 
     Connections {
         target: labCore1

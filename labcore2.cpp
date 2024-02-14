@@ -15,8 +15,10 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
         return "";
     }
     QCA::Cipher::Mode mode;
-    if (modeStr == "ECB") mode = QCA::Cipher::ECB;
-    else if (modeStr == "CBC") mode = QCA::Cipher::CBC;
+    if (modeStr == "CBC") mode = QCA::Cipher::CBC;
+    else if (modeStr == "ECB") mode = QCA::Cipher::ECB;
+    else if (modeStr == "OFB") mode = QCA::Cipher::OFB;
+    else if (modeStr == "CFB") mode = QCA::Cipher::CFB;
     else {
         qWarning() << "INCORRECT MODE";
         return "";
@@ -24,7 +26,6 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
     QCA::Cipher::Padding paddingMode;
     if (paddingModeStr == "ZEROS") paddingMode = QCA::Cipher::NoPadding;
     else if (paddingModeStr == "PKCS7") paddingMode = QCA::Cipher::PKCS7;
-    else if (paddingModeStr == "DEFAULT") paddingMode = QCA::Cipher::DefaultPadding;
     else {
         qWarning() << "INCORRECT PADDING";
         return "";
@@ -40,17 +41,7 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
         return "";
     }
 
-    // auto t = QCA::hexToArray(keyStr);
-    // qDebug() << keyStr << " -> " << QCA::arrayToHex(t) << " -> " << QCA::arrayToHex(t);
-    // return "";
-
-    // char setup[] = "tripledes-ecb";
-    // if (!QCA::isSupported(setup)) {
-    //     qDebug() << setup << "is not supported";
-    //     return "";
-    // }
     QCA::Cipher cipher(type, mode, paddingMode, direction, key, initVector);
-
     return QCA::arrayToHex(cipher.process(text).toByteArray());
 }
 
@@ -61,17 +52,17 @@ void LabCore2::test() {
     if (gowe) {
         we();
     } else {
-        // QString text = "0123456789abcde7";
-        // QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
-        // QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
-        // qDebug() << text << "->" << textEnc << "->" << textEncDec;
-
-        QString text = "123456abcd";
-        QString textEnc = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", text, "ENCRYPT");
-        QString textEncDec = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", textEnc, "DECRYPT");
+        QString text = "0123456789abcde7";
+        QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
+        QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
         qDebug() << text << "->" << textEnc << "->" << textEncDec;
 
-        qDebug() << "7F1DDA77826F8AFF";
+        text = "123456abcd";
+        textEnc = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", text, "ENCRYPT");
+        textEncDec = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", textEnc, "DECRYPT");
+        qDebug() << text << "->" << textEnc << "->" << textEncDec;
+
+        qDebug() << "7F1D0A77826F8AFF";
     }
 }
 

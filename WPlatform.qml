@@ -20,7 +20,7 @@ Item {
         shadowBlur: 0.5
         shadowScale: 1
         shadowColor: 'black'
-        shadowOpacity: 0.3
+        shadowOpacity: 0.2
         shadowVerticalOffset: 3
     }
 }
