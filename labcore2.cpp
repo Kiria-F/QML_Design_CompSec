@@ -6,22 +6,32 @@ LabCore2::LabCore2(QObject *parent)
     : QObject{parent}
 {}
 
-QString LabCore2::process(QString modeStr, QString paddingModeStr, QString initVectorStr, QString keyStr, QString textStr, QString directionStr) {
+QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeStr, QString initVectorStr, QString keyStr, QString textStr, QString directionStr) {
+    QString type;
+    if (typeStr == "3DES") type = "tripledes";
+    else if (typeStr == "AES128") type = "aes128";
+    else {
+        qWarning() << "INCORRECT TYPE";
+        return "";
+    }
     QCA::Cipher::Mode mode;
     if (modeStr == "ECB") mode = QCA::Cipher::ECB;
+    else if (modeStr == "CBC") mode = QCA::Cipher::CBC;
     else {
         qWarning() << "INCORRECT MODE";
         return "";
     }
     QCA::Cipher::Padding paddingMode;
     if (paddingModeStr == "ZEROS") paddingMode = QCA::Cipher::NoPadding;
+    else if (paddingModeStr == "PKCS7") paddingMode = QCA::Cipher::PKCS7;
+    else if (paddingModeStr == "DEFAULT") paddingMode = QCA::Cipher::DefaultPadding;
     else {
         qWarning() << "INCORRECT PADDING";
         return "";
     }
     QCA::InitializationVector initVector(QCA::hexToArray(initVectorStr));
     QCA::SymmetricKey key(QCA::hexToArray(keyStr));
-    QByteArray text = textStr.toLatin1();
+    QByteArray text = QCA::hexToArray(textStr);
     QCA::Direction direction;
     if (directionStr == "ENCRYPT") direction = QCA::Encode;
     else if (directionStr == "DECRYPT") direction = QCA::Decode;
@@ -34,29 +44,14 @@ QString LabCore2::process(QString modeStr, QString paddingModeStr, QString initV
     // qDebug() << keyStr << " -> " << QCA::arrayToHex(t) << " -> " << QCA::arrayToHex(t);
     // return "";
 
-    char setup[] = "tripledes-ecb";
-    if (!QCA::isSupported(setup)) {
-        qDebug() << setup << "is not supported";
-        return "";
-    }
-    QCA::Cipher cipher("tripledes",
-                       mode,
-                       paddingMode,
-                       direction,
-                       key,
-                       initVector);
+    // char setup[] = "tripledes-ecb";
+    // if (!QCA::isSupported(setup)) {
+    //     qDebug() << setup << "is not supported";
+    //     return "";
+    // }
+    QCA::Cipher cipher(type, mode, paddingMode, direction, key, initVector);
 
-    QCA::SecureArray codeBody = cipher.update(text);
-    if (!cipher.ok()) {
-        qDebug() << "Update failed";
-    }
-
-    QCA::SecureArray codeTail = cipher.final();
-    if (!cipher.ok()) {
-        qDebug() << "Final failed";
-    }
-
-    return QCA::arrayToHex((codeBody.append(codeTail)).toByteArray());
+    return QCA::arrayToHex(cipher.process(text).toByteArray());
 }
 
 void we();
@@ -66,18 +61,23 @@ void LabCore2::test() {
     if (gowe) {
         we();
     } else {
-        QString text = "0123456789abcde7";
-        QString textEnc = process("ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
-        QString textEncDec = process("ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
+        // QString text = "0123456789abcde7";
+        // QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
+        // QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "DECRYPT");
+        // qDebug() << text << "->" << textEnc << "->" << textEncDec;
+
+        QString text = "123456abcd";
+        QString textEnc = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", text, "ENCRYPT");
+        QString textEncDec = process("AES128", "CBC", "DEFAULT", "1234567812345678", "1234abc1234abc", textEnc, "DECRYPT");
         qDebug() << text << "->" << textEnc << "->" << textEncDec;
 
-    qDebug() << "7F1DDA77826F8AFF";
+        qDebug() << "7F1DDA77826F8AFF";
     }
 }
 
 void we() {
-
-    QCA::SecureArray arg = "hello";
+    QCA::SecureArray text = "hello";
+    qDebug() << "WE have" << text.data();
 
     // AES128 testing
     if (!QCA::isSupported("aes128-cbc-pkcs7"))
@@ -106,14 +106,14 @@ void we() {
         // the result of that is returned - note that if there is less than
         // 16 bytes (1 block), then nothing will be returned - it is buffered
         // update() can be called as many times as required.
-        QCA::SecureArray u = cipher.update(arg);
+        QCA::SecureArray u = cipher.update(text);
 
         // We need to check if that update() call worked.
         if (!cipher.ok()) {
             printf("Update failed\n");
         }
         // output the results of that stage
-        printf("AES128 encryption of %s is [%s]\n", arg.data(), qPrintable(QCA::arrayToHex(u.toByteArray())));
+        printf("AES128 encryption of %s is [%s]\n", text.data(), qPrintable(QCA::arrayToHex(u.toByteArray())));
 
         // Because we are using PKCS7 padding, we need to output the final (padded) block
         // Note that we should always call final() even with no padding, to clean up
@@ -123,6 +123,8 @@ void we() {
         if (!cipher.ok()) {
             printf("Final failed\n");
         }
+        qDebug() << "WE have crypted it into" << (u.append(f)).data();
+
         // and output the resulting block. The ciphertext is the results of update()
         // and the result of final()
         printf("Final block for AES128 encryption is [0x%s]\n", qPrintable(QCA::arrayToHex(f.toByteArray())));
@@ -149,7 +151,8 @@ void we() {
                plainText.data());
 
         // Again we need to call final(), to get the last block (with its padding removed)
-        plainText = cipher.final();
+        plainText.append(cipher.final());
+        qDebug() << "WE have decrypted it into" << plainText.data();
 
         // check if the final() call worked
         if (!cipher.ok()) {
