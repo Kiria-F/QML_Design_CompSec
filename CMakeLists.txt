@@ -4,7 +4,7 @@ project(ComputerSecurityLabs VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Charts)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -31,7 +31,7 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES LoaderPlug.qml
     QML_FILES WButton.qml
     QML_FILES WStateButton.qml
-    QML_FILES PopUp.qml
+    QML_FILES WPopUp.qml
     QML_FILES WTextField.qml
     QML_FILES WPlatform.qml
     QML_FILES WText.qml
@@ -50,6 +50,7 @@ set_target_properties(appComputerSecurityLabs PROPERTIES
 
 target_link_libraries(appComputerSecurityLabs
     PRIVATE Qt6::Quick
+    PRIVATE Qt6::Charts
     PRIVATE /home/f/Qt/6.6.1/gcc_64/lib/libqca-qt6.so
 )
 

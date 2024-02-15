@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <Qca-qt6/QtCrypto/QtCrypto>
@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
     QCA::Initializer qcaInit;
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     Constants* constants = new Constants(&app);

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Shapes
 import QtQuick.Effects
 import QtQuick.Controls
+import QtCharts
 
 Item {
     id: core
@@ -28,11 +29,8 @@ Item {
         id: keyField
         lines: 1
         length: 7
-        anchors {
-            left: parent.left
-            leftMargin: 100
-            verticalCenter: parent.verticalCenter
-        }
+        x: 150 - width / 2
+        anchors.verticalCenter: parent.verticalCenter
         placeholder: "0000000"
         horizontalAlignment: TextEdit.AlignHCenter
         onTextChanged: {
@@ -47,11 +45,8 @@ Item {
         id: hashField
         lines: 2
         length: 16
-        anchors {
-            right: parent.right
-            rightMargin: 100
-            verticalCenter: parent.verticalCenter
-        }
+        x: parent.width - 150 - width / 2
+        anchors.verticalCenter: parent.verticalCenter
         states: [
             State {
                 name: "MD5"
@@ -82,6 +77,7 @@ Item {
                 }
             }
         ]
+
         transitions: [
             Transition {
                 NumberAnimation {
@@ -91,6 +87,7 @@ Item {
                 }
             }
         ]
+
         onTextChanged: {
             let pos = cursorPosition
             let aLen = text.length;
@@ -116,6 +113,7 @@ Item {
                 id: btnMD5
                 text: "MD5"
                 group: buttonsContainer.btnGroup
+
                 onClicked: {
                     hashField.state = "MD5"
                     buttonsContainer.commonHandler()
@@ -126,6 +124,7 @@ Item {
                 id: btnSHA1
                 text: "SHA1"
                 group: buttonsContainer.btnGroup
+
                 onClicked: {
                     hashField.state = "SHA1"
                     buttonsContainer.commonHandler()
@@ -140,6 +139,7 @@ Item {
                 id: btnSHA256
                 text: "SHA256"
                 group: buttonsContainer.btnGroup
+
                 onClicked: {
                     hashField.state = "SHA256"
                     buttonsContainer.commonHandler()
@@ -150,10 +150,59 @@ Item {
                 id: btnSHA512
                 text: "SHA512"
                 group: buttonsContainer.btnGroup
+
                 onClicked: {
                     hashField.state = "SHA512"
                     buttonsContainer.commonHandler()
                 }
+            }
+        }
+    }
+
+    WButton {
+        id: graphBtn
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: bar.i - height - 20
+        text: "Graph"
+
+        onClicked: {
+            graphPopUp.show()
+        }
+    }
+
+    WPopUp {
+        id: graphPopUp
+        anchors.centerIn: parent
+        width: 600
+        height: 600
+        autohide: false
+
+        ChartView {
+            title: "Line"
+            anchors.fill: parent
+            antialiasing: true
+
+            MouseArea
+            {
+                id: chartMouseArea
+                anchors.fill: parent
+                propagateComposedEvents: true
+                onClicked:
+                {
+                    graphPopUp.hide()
+                }
+                hoverEnabled: false
+            }
+
+            LineSeries {
+                name: "LineSeries"
+                XYPoint { x: 0; y: 0 }
+                XYPoint { x: 1.1; y: 2.1 }
+                XYPoint { x: 1.9; y: 3.3 }
+                XYPoint { x: 2.1; y: 2.1 }
+                XYPoint { x: 2.9; y: 4.9 }
+                XYPoint { x: 3.4; y: 3.0 }
+                XYPoint { x: 4.1; y: 3.3 }
             }
         }
     }
@@ -164,6 +213,7 @@ Item {
         y: tar.o + ars.w / 2 - 10
         z: 1
         text: "Hash"
+
         onClicked: {
             if (keyField.text.length === 0) {
                 popUp.show("You should enter\na key first")
@@ -181,6 +231,7 @@ Item {
         y: bar.i + ars.w / 2 - 10
         z: 1
         text: "Restore"
+
         onClicked: {
             if (hashField.text.length === 0) {
                 popUp.show("You should enter\na hash first")
@@ -328,7 +379,7 @@ Item {
         }
     }
 
-    PopUp {
+    WPopUp {
         id: popUp
         anchors.centerIn: parent
     }
