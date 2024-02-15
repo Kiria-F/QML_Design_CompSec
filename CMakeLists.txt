@@ -35,6 +35,7 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES WTextField.qml
     QML_FILES WPlatform.qml
     QML_FILES WText.qml
+    SOURCES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

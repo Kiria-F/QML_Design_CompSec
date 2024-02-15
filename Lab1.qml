@@ -6,6 +6,7 @@ import QtCharts
 
 Item {
     id: core
+    property list<var> seriesOrder: [md5Series, sha1Series, sha256Series, sha512Series]
 
     Connections {
         target: labCore1
@@ -21,6 +22,22 @@ Item {
                 timeText.text = ms + " ms"
             } else {
                 timeText.text = "Not Found"
+            }
+        }
+
+        function onGraphCalced(mode: string, mss: list<int>) {
+            var curIndex = 0
+            for (var i = 0; i < core.seriesOrder.length; ++i)
+                if (core.seriesOrder[i].name === mode)
+                    curIndex = i
+
+            for (i = 1; i < mss.length; ++i) {
+                core.seriesOrder[curIndex].append(i, mss[i])
+            }
+            seriesOrder[curIndex].axisY.max = Math.max(seriesOrder[curIndex].axisY.max, mss[mss.length - 1])
+
+            if (curIndex < core.seriesOrder.length - 1) {
+                labCore1.calcGraph(seriesOrder[curIndex + 1].name)
             }
         }
     }
@@ -167,6 +184,7 @@ Item {
 
         onClicked: {
             graphPopUp.show()
+            labCore1.calcGraph(core.seriesOrder[0].name)
         }
     }
 
@@ -178,7 +196,7 @@ Item {
         autohide: false
 
         ChartView {
-            title: "Line"
+            title: "Restoration time"
             anchors.fill: parent
             antialiasing: true
 
@@ -186,23 +204,42 @@ Item {
             {
                 id: chartMouseArea
                 anchors.fill: parent
-                propagateComposedEvents: true
+                // propagateComposedEvents: true
+
                 onClicked:
                 {
                     graphPopUp.hide()
+                    for (var i = 0; i < core.seriesOrder.length; ++i) {
+                        core.seriesOrder[i].clear()
+                        core.seriesOrder[i].axisY.max = 10
+                    }
                 }
-                hoverEnabled: false
             }
 
             LineSeries {
-                name: "LineSeries"
-                XYPoint { x: 0; y: 0 }
-                XYPoint { x: 1.1; y: 2.1 }
-                XYPoint { x: 1.9; y: 3.3 }
-                XYPoint { x: 2.1; y: 2.1 }
-                XYPoint { x: 2.9; y: 4.9 }
-                XYPoint { x: 3.4; y: 3.0 }
-                XYPoint { x: 4.1; y: 3.3 }
+                id: md5Series
+                name: "MD5"
+                axisX: ValuesAxis {
+                    max: 10
+                }
+                axisY: ValuesAxis {
+                    max: 10
+                }
+            }
+
+            LineSeries {
+                id: sha1Series
+                name: "SHA1"
+            }
+
+            LineSeries {
+                id: sha256Series
+                name: "SHA256"
+            }
+
+            LineSeries {
+                id: sha512Series
+                name: "SHA512"
             }
         }
     }
