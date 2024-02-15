@@ -38,6 +38,8 @@ Item {
 
             if (curIndex < core.seriesOrder.length - 1) {
                 labCore1.calcGraph(seriesOrder[curIndex + 1].name)
+            } else {
+                graphPopUp.completed = true
             }
         }
     }
@@ -184,6 +186,7 @@ Item {
 
         onClicked: {
             graphPopUp.show()
+            graphPopUp.completed = false
             labCore1.calcGraph(core.seriesOrder[0].name)
         }
     }
@@ -194,6 +197,14 @@ Item {
         width: 600
         height: 600
         autohide: false
+        property bool completed: true
+
+        onHidden: {
+            for (var i = 0; i < core.seriesOrder.length; ++i) {
+                core.seriesOrder[i].clear()
+                core.seriesOrder[i].axisY.max = 10
+            }
+        }
 
         ChartView {
             title: "Restoration time"
@@ -206,14 +217,7 @@ Item {
                 anchors.fill: parent
                 // propagateComposedEvents: true
 
-                onClicked:
-                {
-                    graphPopUp.hide()
-                    for (var i = 0; i < core.seriesOrder.length; ++i) {
-                        core.seriesOrder[i].clear()
-                        core.seriesOrder[i].axisY.max = 10
-                    }
-                }
+                onClicked: if (graphPopUp.completed) graphPopUp.hide()
             }
 
             LineSeries {

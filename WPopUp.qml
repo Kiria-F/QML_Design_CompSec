@@ -10,6 +10,8 @@ Item {
     height: 200
     visible: false
 
+    signal hidden()
+
     function show(text = "") {
         wPopUpText.text = text
         visible = true
@@ -22,6 +24,11 @@ Item {
         if (wPopUp.autohide) wPopUpShowHideAnimation.stop()
         else wPopUpShowAnimation.stop()
         wPopUpHideAnimation.start()
+    }
+
+    Component.onCompleted: {
+        wPopUpHideAnimation.finished.connect(hidden)
+        wPopUpShowHideAnimation.finished.connect(hidden)
     }
 
     Rectangle {
