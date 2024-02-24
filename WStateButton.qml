@@ -138,7 +138,7 @@ Item {
 
     transitions: [
         Transition {
-            from: "pressed"
+            from: "pressed, disabled"
             PropertyAnimation {
                 properties: "color, color.r, color.g, color.b, shadowBlur, shadowScale, shadowVerticalOffset, shadowOpacity, strokeWidth, y, opacity"
                 duration: 200
@@ -147,7 +147,7 @@ Item {
         },
 
         Transition {
-            to: "pressed"
+            to: "pressed, disabled"
             PropertyAnimation {
                 properties: "color, color.r, color.g, color.b, shadowBlur, shadowScale, shadowVerticalOffset, shadowOpacity, strokeWidth, y, opacity"
                 duration: 200
