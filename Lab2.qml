@@ -7,11 +7,6 @@ Item {
     property string cipherMode
     property string cipherPadding
 
-    Component.onCompleted: {
-        labCore2.test()
-        // console.log("auto ->", labCore2.process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", "0123456789abcde7", "ENCRYPT"))
-    }
-
     Column {
         spacing: 20
         anchors.centerIn: parent
@@ -174,7 +169,7 @@ Item {
                 id: cipherSetupPaddingPlatform
                 width: cipherSetupPaddingColumn.width + 60
                 height: cipherSetupPaddingColumn.height + 45
-                property list<var> btnGroup: [btnZEROS, btnPKCS7]
+                property list<var> btnGroup: [btnNO, btnPKCS7, btnANSIX, btn1n0s]
 
                 Column {
                     id: cipherSetupPaddingColumn
@@ -191,26 +186,54 @@ Item {
                         color: constants.phantomTextColor
                     }
 
-                    Column {
+                    Row {
                         spacing: 10
 
-                        WStateButton {
-                            id: btnZEROS
-                            text: "ZEROS"
-                            group: cipherSetupPaddingPlatform.btnGroup
+                        Column {
+                            spacing: 10
 
-                            onClicked: {
-                                core.cipherPadding = text
+                            WStateButton {
+                                id: btnNO
+                                text: "NO"
+                                group: cipherSetupPaddingPlatform.btnGroup
+
+                                onClicked: {
+                                    core.cipherPadding = text
+                                }
+                            }
+
+                            WStateButton {
+                                id: btnPKCS7
+                                text: "PKCS7"
+                                group: cipherSetupPaddingPlatform.btnGroup
+
+                                onClicked: {
+                                    core.cipherPadding = text
+                                }
                             }
                         }
 
-                        WStateButton {
-                            id: btnPKCS7
-                            text: "PKCS7"
-                            group: cipherSetupPaddingPlatform.btnGroup
+                        Column {
+                            spacing: 10
 
-                            onClicked: {
-                                core.cipherPadding = text
+                            WStateButton {
+                                id: btnANSIX
+                                text: "ANSIX"
+                                group: cipherSetupPaddingPlatform.btnGroup
+
+                                onClicked: {
+                                    core.cipherPadding = text
+                                }
+                            }
+
+                            WStateButton {
+                                id: btn1n0s
+                                text: "1&0s"
+                                group: cipherSetupPaddingPlatform.btnGroup
+
+                                onClicked: {
+                                    core.cipherPadding = text
+                                }
                             }
                         }
                     }
@@ -241,6 +264,11 @@ Item {
                         id: vectorField
                         Layout.fillWidth: true
                     }
+
+                    WButton {
+                        id: genVectorBtn
+                        text: "Auto"
+                    }
                 }
 
                 RowLayout {
@@ -254,6 +282,11 @@ Item {
                     WTextField {
                         id: keyField
                         Layout.fillWidth: true
+                    }
+
+                    WButton {
+                        id: genKeyBtn
+                        text: "Auto"
                     }
                 }
             }

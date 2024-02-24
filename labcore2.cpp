@@ -1,10 +1,47 @@
 #include "labcore2.h"
 #include <Qca-qt6/QtCrypto/QtCrypto>
 #include <QDebug>
+#include <QRandomGenerator>
 
 LabCore2::LabCore2(QObject *parent)
     : QObject{parent}
 {}
+
+QByteArray LabCore2::addPadding(QByteArray text, QString mode) {
+    int newSize = (text.size() / 8 + 1) * 8;
+    int tailSize = newSize - text.size();
+    if (mode == "PKCS5") {
+        return text.append(tailSize, tailSize);
+    }
+    if (mode == "1&0s") {
+        return text.append(0x80).append(tailSize - 1, 0);
+    }
+    if (mode == "ANSIX") {
+        return text.append(tailSize - 1, 0).append(tailSize);
+    }
+    if (mode == "W3C") {
+        QRandomGenerator rand;
+        for (int i = 0; i < tailSize - 1; ++i) {
+            text.append(rand.generate() % 0x100);
+        }
+        return text.append(tailSize);
+    }
+    qWarning() << "INCORRECT PADDING";
+    return text;
+}
+
+QByteArray LabCore2::removePadding(QByteArray text, QString mode) {
+    if (mode == "PKCS5" || mode == "ANSIX" || mode == "W3C") {
+        return text.chopped(text[text.size() - 1]);
+    }
+    if (mode == "1&0s") {
+        int i = text.size() - 1;
+        while (text[i] != char(0x80)) { --i; }
+        return text.chopped(text.size() - i);
+    }
+    qWarning() << "INCORRECT PADDING";
+    return text;
+}
 
 QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeStr, QString initVectorStr, QString keyStr, QString textStr, QString directionStr) {
     QString type;
@@ -23,13 +60,7 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
         qWarning() << "INCORRECT MODE";
         return "";
     }
-    QCA::Cipher::Padding paddingMode;
-    if (paddingModeStr == "ZEROS") paddingMode = QCA::Cipher::NoPadding;
-    else if (paddingModeStr == "PKCS7") paddingMode = QCA::Cipher::PKCS7;
-    else {
-        qWarning() << "INCORRECT PADDING";
-        return "";
-    }
+    QCA::Cipher::Padding paddingMode = QCA::Cipher::NoPadding;
     QCA::InitializationVector initVector(QCA::hexToArray(initVectorStr));
     QCA::SymmetricKey key(QCA::hexToArray(keyStr));
     QCA::Direction direction;
@@ -53,10 +84,14 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
 void we();
 
 QString LabCore2::test() {
-    bool gowe = 0;
-    if (gowe) {
+    int scenario = 2;
+    switch (scenario) {
+    case 0:
         we();
-    } else {
+        break;
+
+    case 1:
+    {
         QString text = "0123456789abcde7";
         QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
         QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", textEnc, "DECRYPT");
@@ -70,6 +105,21 @@ QString LabCore2::test() {
         qDebug() << "7F1D0A77826F8AFF";
 
         return textEncDec;
+    }
+
+    case 2:
+        QList<QString> examples { "a0b1c2d3e4", "a0b1c2d3e4f5a6", "a0b1c2d3e4f5a6b7" };
+        QList<QString> modes {"PKCS5", "1&0s", "ANSIX", "W3C"};
+        for (const QString& mode : modes) {
+            qDebug() << "MODE" << mode << ":";
+            for (const QString& example : examples) {
+                QByteArray exampleMod1 = addPadding(QCA::hexToArray(example), mode);
+                QByteArray exampleMod2 = removePadding(exampleMod1, mode);
+                qDebug() << example << "->" << QCA::arrayToHex(exampleMod1) << "->" << QCA::arrayToHex(exampleMod2);
+            }
+            qDebug() << QString(20, '_');
+        }
+        break;
     }
     return "eww";
 }

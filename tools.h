@@ -77,6 +77,28 @@ public:
         }
         return QString::fromStdString(str);
     }
+
+    static QString limitLines(QString text, int linesCount, int linesLength = 0) {
+        int lines = 1;
+        int lineLength = 1;
+        for (int index; index < text.size(); ++index, ++lineLength) {
+            if (text[index] == '\n') {
+                if (lineLength == linesLength) {
+                    linesLength = 0;
+                }
+                else {
+                    text.remove(index, 1);
+                    --index;
+                    --lineLength;
+                    continue;
+                }
+            }
+            else if (lineLength == linesLength) {
+                text.insert(index, '\n');
+            }
+        }
+        return text;
+    }
 };
 
 #endif // TOOLS_H
