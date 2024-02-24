@@ -1,14 +1,14 @@
 #include "labcore2.h"
 #include <Qca-qt6/QtCrypto/QtCrypto>
 #include <QDebug>
-#include <QRandomGenerator>
 
 LabCore2::LabCore2(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, qRandomGenerator()
 {}
 
 QByteArray LabCore2::addPadding(QByteArray text, QString mode) {
-    int newSize = (text.size() / 8 + 1) * 8;
+    int blockSize = mode.contains("AES") ? 16 : 8;
+    int newSize = (text.size() / blockSize + 1) * blockSize;
     int tailSize = newSize - text.size();
     if (mode == "PKCS5") {
         return text.append(tailSize, tailSize);
@@ -22,7 +22,7 @@ QByteArray LabCore2::addPadding(QByteArray text, QString mode) {
     if (mode == "W3C") {
         QRandomGenerator rand;
         for (int i = 0; i < tailSize - 1; ++i) {
-            text.append(rand.generate() % 0x100);
+            text.append(rand.bounded(0x100));
         }
         return text.append(tailSize);
     }
@@ -70,15 +70,35 @@ QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeS
         qWarning() << "INCORRECT DIRECTION";
         return "";
     }
-    QCA::SecureArray text;
-    if (!direction) text = textStr.toLatin1();
+    QByteArray text;
+    if (!direction) text = addPadding(textStr.toLatin1(), paddingModeStr);
     else text = QCA::hexToArray(textStr);
 
     QCA::Cipher cipher(type, mode, paddingMode, direction, key, initVector);
-    // return QCA::arrayToHex((cipher.update(text).toByteArray().append(cipher.final().toByteArray())).data());
     QByteArray result = cipher.process(text).toByteArray();
     if (!direction) return QCA::arrayToHex(result);
-    else return QString::fromLatin1(result);
+    else return QString::fromLatin1(removePadding(result, paddingModeStr));
+}
+
+QString LabCore2::genInitVector(QString type) {
+    return type.contains("AES") ? genKey(16) : genKey(8);
+}
+
+QString LabCore2::genKey(QString type) {
+    if (type == "DES") return genKey(8);
+    if (type == "3DES") return genKey(16);
+    if (type == "AES128") return genKey(16);
+    if (type == "AES256") return genKey(32);
+    qWarning() << "INCORRECT TYPE";
+    return "";
+}
+
+QString LabCore2::genKey(int bytes) {
+    QByteArray key(bytes, 0);
+    for (int i = 0; i < bytes; ++i) {
+        key[i] = qRandomGenerator.bounded(0x100);
+    }
+    return QCA::arrayToHex(key);
 }
 
 void we();

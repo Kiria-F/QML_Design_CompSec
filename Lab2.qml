@@ -268,6 +268,10 @@ Item {
                     WButton {
                         id: genVectorBtn
                         text: "Auto"
+
+                        onClicked: {
+                            vectorField.text = labCore2.genInitVector(core.cipherType);
+                        }
                     }
                 }
 
@@ -287,6 +291,10 @@ Item {
                     WButton {
                         id: genKeyBtn
                         text: "Auto"
+
+                        onClicked: {
+                            keyField.text = labCore2.genKey(core.cipherType)
+                        }
                     }
                 }
             }
