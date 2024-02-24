@@ -159,6 +159,7 @@ Item {
                                 onClicked: {
                                     core.cipherMode = text
                                 }
+                                disabledCondition: core.cipherType === "3DES"
                             }
                         }
                     }

@@ -7,16 +7,16 @@ Item {
     property alias text: wButtonText.text
     property color color: "white"
     property list<var> group
+    property bool disabledCondition
     height: 40
     width: 100
-    state: "released"
 
     signal clicked(var mouse)
     signal released
 
     function release() {
         if (state === "pressed") {
-            wButton.state = "released"
+            wButton.state = ""
             wButton.released()
         }
     }
@@ -26,7 +26,7 @@ Item {
     }
 
     function enable() {
-        wButton.state = "released"
+        wButton.state = ""
     }
 
     Component.onCompleted: {
@@ -49,17 +49,17 @@ Item {
             anchors.fill: parent
             property bool hovered: false
             onEntered: {
-                if (wButton.state === "released") {
+                if (wButton.state === "") {
                     wButtonRect.border.width = 1
                 }
             }
             onExited: {
-                if (wButton.state === "released" && wButtonMA.hoverEnabled) {
+                if (wButton.state === "" && wButtonMA.hoverEnabled) {
                     wButtonRect.border.width = 0
                 }
             }
             onClicked: {
-                if (wButton.state === "released") {
+                if (wButton.state === "") {
                     wButton.state = "pressed"
                     for (var i = 0; i < wButton.group.length; ++i) {
                         if (group[i] !== wButton) {
@@ -132,23 +132,6 @@ Item {
 
     states: [
         State {
-            name: "released"
-            PropertyChanges { target: wButtonText; color: constants.weakTextColor }
-            PropertyChanges { target: wButtonRect; border.width: 0 }
-            PropertyChanges { target: wButtonRect; border.color: "#bbbbff" }
-            PropertyChanges { target: wButtonRect; color.r: wButton.color.r }
-            PropertyChanges { target: wButtonRect; color.g: wButton.color.g }
-            PropertyChanges { target: wButtonRect; color.b: wButton.color.b }
-            PropertyChanges { target: wButtonRect; y: 0 }
-            PropertyChanges { target: wButtonShadow; shadowBlur: 0.3 }
-            PropertyChanges { target: wButtonShadow; shadowScale: 1 }
-            PropertyChanges { target: wButtonShadow; shadowVerticalOffset: 3 }
-            PropertyChanges { target: wButtonShadow; shadowOpacity: 0.3 }
-            PropertyChanges { target: dashedBorder; opacity: 0 }
-            PropertyChanges { target: wButtonMA; hoverEnabled: true }
-        },
-
-        State {
             name: "pressed"
             PropertyChanges { target: wButtonText; color: constants.strongTextColor }
             PropertyChanges { target: wButtonRect; border.width: 2 }
@@ -167,6 +150,7 @@ Item {
 
         State {
             name: "disabled"
+            when: wButton.disabledCondition
             PropertyChanges { target: wButtonText; color: constants.phantomTextColor }
             PropertyChanges { target: wButtonRect; border.width: 0 }
             PropertyChanges { target: wButtonRect; border.color: constants.weakTextColor }

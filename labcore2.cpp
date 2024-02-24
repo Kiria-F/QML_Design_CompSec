@@ -45,8 +45,10 @@ QByteArray LabCore2::removePadding(QByteArray text, QString mode) {
 
 QString LabCore2::process(QString typeStr, QString modeStr, QString paddingModeStr, QString initVectorStr, QString keyStr, QString textStr, QString directionStr) {
     QString type;
-    if (typeStr == "3DES") type = "tripledes";
+    if (typeStr == "DES") type = "des";
+    else if (typeStr == "3DES") type = "tripledes";
     else if (typeStr == "AES128") type = "aes128";
+    else if (typeStr == "AES256") type = "aes256";
     else {
         qWarning() << "INCORRECT TYPE";
         return "";
@@ -104,14 +106,13 @@ QString LabCore2::genKey(int bytes) {
 void we();
 
 QString LabCore2::test() {
-    int scenario = 2;
+    int scenario = 3;
     switch (scenario) {
     case 0:
         we();
         break;
 
-    case 1:
-    {
+    case 1: {
         QString text = "0123456789abcde7";
         QString textEnc = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", text, "ENCRYPT");
         QString textEncDec = process("3DES", "ECB", "ZEROS", "2020202020202020", "0123456789abcdeffedcba9876543210", textEnc, "DECRYPT");
@@ -127,7 +128,7 @@ QString LabCore2::test() {
         return textEncDec;
     }
 
-    case 2:
+    case 2: {
         QList<QString> examples { "a0b1c2d3e4", "a0b1c2d3e4f5a6", "a0b1c2d3e4f5a6b7" };
         QList<QString> modes {"PKCS5", "1&0s", "ANSIX", "W3C"};
         for (const QString& mode : modes) {
@@ -140,6 +141,19 @@ QString LabCore2::test() {
             qDebug() << QString(20, '_');
         }
         break;
+    }
+
+    case 3: {
+        QList<QString> types {"des", "tripledes", "aes128", "aes256"};
+        QList<QString> modes {"cbc", "ecb", "ofb", "cfb"};
+        for (const QString& type : types) {
+            for (const QString& mode : modes) {
+                QString setup = type + "-" + mode;
+                qDebug() << setup << "->" << QCA::isSupported(setup.toLatin1());
+            }
+        }
+    }
+
     }
     return "eww";
 }
