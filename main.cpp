@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QSurfaceFormat>
 #include <Qca-qt6/QtCrypto/QtCrypto>
 #include "geometry.h"
 #include "labcore1.h"
@@ -11,6 +12,10 @@ int main(int argc, char *argv[])
 {
     QCA::Initializer qcaInit;
     QApplication app(argc, argv);
+
+    QSurfaceFormat format;
+    format.setSamples(8);
+    QSurfaceFormat::setDefaultFormat(format);
 
     QQmlApplicationEngine engine;
     Constants* constants = new Constants(&app);

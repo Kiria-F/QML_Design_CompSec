@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Shapes
 
 Item {
     id: wButton
@@ -9,11 +10,13 @@ Item {
     property list<var> group
     height: 40
     width: 100
+
     signal clicked(var mouse)
     signal released
+
     function release() {
         if (pressed) {
-            wButtonReleaseAnimation.restart()
+            wButton.state = "released"
             wButtonMA.hoverEnabled = true
             wButton.pressed = false
             wButton.released()
@@ -30,7 +33,7 @@ Item {
         color: wButton.color
         height: wButton.height
         width: wButton.width
-        radius: height / 2
+        radius: constants.radius
         border.width: 0
         border.color: "#bbbbff"
 
@@ -49,7 +52,7 @@ Item {
             }
             onClicked: {
                 wButton.pressed = true
-                wButtonClickAnimation.restart()
+                wButton.state = "pressed"
                 hoverEnabled = false
                 for (var i = 0; i < wButton.group.length; ++i) {
                     if (group[i] !== wButton) {
@@ -71,8 +74,175 @@ Item {
                 bold: true
             }
         }
+
+        Shape {
+            id: dashedBorder
+            opacity: 0
+            anchors.fill: parent
+
+            ShapePath {
+                id: db
+                strokeColor: "black"
+                strokeWidth: 2
+                strokeStyle: ShapePath.DashLine
+                fillColor: "transparent"
+                property real w: dashedBorder.width
+                property real h: dashedBorder.height
+                property real r: constants.radius
+
+                startX: r
+                startY: h
+                PathArc { relativeX: 0; y: 0; radiusX: db.r; radiusY: db.r }
+                PathLine { x: db.w - db.r; relativeY: 0 }
+                PathArc { relativeX: 0; y: db.h; radiusX: db.r; radiusY: db.r }
+                PathLine { x: db.r; relativeY: 0 }
+            }
+        }
     }
 
+    MultiEffect {
+        id: wButtonShadow
+        source: wButtonRect
+        anchors.fill: wButtonRect
+        shadowEnabled: true
+        shadowBlur: 0.3
+        shadowScale: 1
+        shadowColor: 'black'
+        shadowOpacity: 0.3
+        shadowVerticalOffset: 3
+    }
+
+    transitions: [
+        Transition {
+            PropertyAnimation {
+                properties: "color, border.color, border.width, shadowBlur, shadowScale, shadowVerticalOffset, shadowOpacity, y"
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+    ]
+
+    states: [
+        State {
+            name: "released"
+
+            PropertyChanges {
+                target: wButtonText
+                color: constants.weakTextColor
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                border.width: 0
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                border.color: "#bbbbff"
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowBlur: 0.3
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowScale: 1
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowVerticalOffset: 3
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowOpacity: 0.3
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.r: wButton.color.r
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.g: wButton.color.g
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.b: wButton.color.b
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                y: 0
+            }
+        },
+
+        State {
+            name: "pressed"
+
+            PropertyChanges {
+                target: wButtonText
+                color: constants.strongTextColor
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                border.width: 2
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                border.color: constants.weakTextColor
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowBlur: 0.1
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowScale: 0.95
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowVerticalOffset: 0
+            }
+
+            PropertyChanges {
+                target: wButtonShadow
+                shadowOpacity: 0.5
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.r: wButton.color.r * 0.98
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.g: wButton.color.g * 0.98
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                color.b: wButton.color.b * 0.98
+            }
+
+            PropertyChanges {
+                target: wButtonRect
+                y: 3
+            }
+        }
+
+    ]
+/*
     ParallelAnimation {
         id: wButtonClickAnimation
 
@@ -256,16 +426,5 @@ Item {
             easing.type: Easing.InOutQuad
         }
     }
-
-    MultiEffect {
-        id: wButtonShadow
-        source: wButtonRect
-        anchors.fill: wButtonRect
-        shadowEnabled: true
-        shadowBlur: 0.3
-        shadowScale: 1
-        shadowColor: 'black'
-        shadowOpacity: 0.3
-        shadowVerticalOffset: 3
-    }
+    */
 }
