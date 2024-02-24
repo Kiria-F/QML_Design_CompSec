@@ -7,6 +7,7 @@ LabCore2::LabCore2(QObject *parent)
 {}
 
 QByteArray LabCore2::addPadding(QByteArray text, QString mode) {
+    if (mode == "NO") return text;
     int blockSize = mode.contains("AES") ? 16 : 8;
     int newSize = (text.size() / blockSize + 1) * blockSize;
     int tailSize = newSize - text.size();
@@ -31,6 +32,7 @@ QByteArray LabCore2::addPadding(QByteArray text, QString mode) {
 }
 
 QByteArray LabCore2::removePadding(QByteArray text, QString mode) {
+    if (mode == "NO") return text;
     if (mode == "PKCS5" || mode == "ANSIX" || mode == "W3C") {
         return text.chopped(text[text.size() - 1]);
     }

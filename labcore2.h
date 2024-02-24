@@ -19,6 +19,7 @@ public:
     QString genKey(int bytes);
     Q_INVOKABLE QString test();
 signals:
+    void somethingWentWrong();
 };
 
 #endif // LABCORE2_H

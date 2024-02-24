@@ -170,7 +170,7 @@ Item {
                 id: cipherSetupPaddingPlatform
                 width: cipherSetupPaddingColumn.width + 60
                 height: cipherSetupPaddingColumn.height + 45
-                property list<var> btnGroup: [btnNO, btnPKCS7, btnANSIX, btn1n0s]
+                property list<var> btnGroup: [btnNO, btnPKCS5, btnANSIX, btn1n0s]
 
                 Column {
                     id: cipherSetupPaddingColumn
@@ -204,8 +204,8 @@ Item {
                             }
 
                             WStateButton {
-                                id: btnPKCS7
-                                text: "PKCS7"
+                                id: btnPKCS5
+                                text: "PKCS5"
                                 group: cipherSetupPaddingPlatform.btnGroup
 
                                 onClicked: {
