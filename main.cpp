@@ -34,7 +34,5 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("ComputerSecurityLabs", "Main");
 
-    labCore2->test();
-
     return app.exec();
 }
