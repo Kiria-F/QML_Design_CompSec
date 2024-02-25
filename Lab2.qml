@@ -408,15 +408,18 @@ Item {
                         title: "Please choose a file"
                         currentFolder: "file:///home/f/Documents"
                         onAccepted: {
+                            var source = ioFile.read(fileDialog.selectedFile)
                             var encoded = labCore2.process(
                                         core.cipherType,
                                         core.cipherMode,
                                         core.cipherPadding,
                                         vectorField.text,
                                         keyField.text,
-                                        ioFile.read(fileDialog.selectedFile),
+                                        source,
                                         cipherTextPlatform.direction)
-                            ioFile.write(fileDialog.selectedFile + "-encoded.txt", encoded)
+                            var target = fileDialog.selectedFile + (cipherTextPlatform.state === "0" ? "-enc" : "-dec")
+                            ioFile.write(target, encoded)
+                            popUp.show((cipherTextPlatform.state === "0" ? "En" : "De") + "coded to\n" + target.substring(target.lastIndexOf("/") + 1))
                         }
                     }
                 }
@@ -438,5 +441,10 @@ Item {
                 }
             }
         }
+    }
+
+    WPopUp {
+        id: popUp
+        anchors.centerIn: parent
     }
 }
