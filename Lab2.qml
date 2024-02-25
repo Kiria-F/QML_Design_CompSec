@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 Item {
     id: core
@@ -306,6 +307,7 @@ Item {
             width: parent.width
             height: cipherTextColumn.height + 60
             state: "0"
+            property string direction: state === "0" ? "ENCRYPT" : "DECRYPT"
 
             states: [
                 State {
@@ -388,10 +390,29 @@ Item {
                         color: "#ccffaa"
 
                         onClicked: {
-                            var dir
-                            if (cipherTextPlatform.state === "0") dir = "ENCRYPT"
-                            else dir = "DECRYPT"
-                            codeField.text = labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, dir)
+                            codeField.text = labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, cipherTextPlatform.direction)
+                        }
+                    }
+
+                    WButton {
+                        id: fileBtn
+                        text: "File"
+
+                        onClicked: {
+                            fileDialog.open()
+                        }
+                    }
+
+                    FileDialog {
+                        id: fileDialog
+                        title: "Please choose a file"
+                        currentFolder: "file:///home/f/Documents"
+                        onAccepted: {
+                            console.log("You chose: " + fileDialog.selectedFile)
+                            labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, cipherTextPlatform.direction)
+                        }
+                        onRejected: {
+                            console.log("Canceled")
                         }
                     }
                 }
@@ -413,5 +434,5 @@ Item {
                 }
             }
         }
-    }2
+    }
 }

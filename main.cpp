@@ -6,6 +6,7 @@
 #include "geometry.h"
 #include "labcore1.h"
 #include "labcore2.h"
+#include "iofile.h"
 #include "constants.h"
 
 int main(int argc, char *argv[])
@@ -18,14 +19,16 @@ int main(int argc, char *argv[])
     QSurfaceFormat::setDefaultFormat(format);
 
     QQmlApplicationEngine engine;
-    Constants* constants = new Constants(&app);
-    engine.rootContext()->setContextProperty("constants", constants);
-    Geometry* geometry = new Geometry(&app);
-    engine.rootContext()->setContextProperty("geometry", geometry);
-    LabCore1* labCore1 = new LabCore1(&app);
-    engine.rootContext()->setContextProperty("labCore1", labCore1);
-    LabCore2* labCore2 = new LabCore2(&app);
-    engine.rootContext()->setContextProperty("labCore2", labCore2);
+    QMap<QString, QObject*> integrations {
+        { "constants", new Constants(&app) },
+        { "geometry", new Geometry(&app) },
+        { "ioFile", new IOFile(&app) },
+        { "labCore1", new LabCore1(&app) },
+        { "labCore2", new LabCore2(&app) }
+    };
+    for (auto integration = integrations.constKeyValueBegin(); integration != integrations.constKeyValueEnd(); ++integration) {
+        engine.rootContext()->setContextProperty(integration->first, integration->second);
+    }
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
