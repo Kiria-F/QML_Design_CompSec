@@ -408,11 +408,15 @@ Item {
                         title: "Please choose a file"
                         currentFolder: "file:///home/f/Documents"
                         onAccepted: {
-                            console.log("You chose: " + fileDialog.selectedFile)
-                            labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, cipherTextPlatform.direction)
-                        }
-                        onRejected: {
-                            console.log("Canceled")
+                            var encoded = labCore2.process(
+                                        core.cipherType,
+                                        core.cipherMode,
+                                        core.cipherPadding,
+                                        vectorField.text,
+                                        keyField.text,
+                                        ioFile.read(fileDialog.selectedFile),
+                                        cipherTextPlatform.direction)
+                            ioFile.write(fileDialog.selectedFile + "-encoded.txt", encoded)
                         }
                     }
                 }

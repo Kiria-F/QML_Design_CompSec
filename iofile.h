@@ -12,21 +12,18 @@ public:
     explicit IOFile(QObject *parent = nullptr) : QObject(parent) {}
 
     Q_INVOKABLE QString read(QString path) {
+        if (path.startsWith("file://")) path = path.sliced(7);
         QFile file(path);
-        QString fileContent;
+        QString text;
         if (file.open(QIODevice::ReadOnly) ) {
-            QString line;
-            QTextStream t(&file);
-            do {
-                line = t.readLine();
-                fileContent += line;
-            } while (!line.isNull());
+            text = QTextStream (&file).readAll();
             file.close();
         }
-        return fileContent;
+        return text;
     }
 
     Q_INVOKABLE void write(QString path, QString text) {
+        if (path.startsWith("file://")) path = path.sliced(7);
         QFile file(path);
         if (!file.open(QFile::WriteOnly | QFile::Truncate))
             return;

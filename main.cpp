@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
         { "constants", new Constants(&app) },
         { "geometry", new Geometry(&app) },
         { "ioFile", new IOFile(&app) },
+        { "ioFile", new IOFile(&app) },
         { "labCore1", new LabCore1(&app) },
         { "labCore2", new LabCore2(&app) }
     };
