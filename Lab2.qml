@@ -7,6 +7,7 @@ Item {
     property string cipherType
     property string cipherMode
     property string cipherPadding
+    property bool byteText
 
     Column {
         spacing: 20
@@ -373,14 +374,18 @@ Item {
                     spacing: 20
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    WButton {
-                        text: "Swap"
+                    WStateButton {
+                        id: textBtn
+                        text: "Text"
+                        group: [bytesBtn]
+                        onClicked: core.byteText = false
+                    }
 
-                        onClicked: {
-                            cipherTextPlatform.state = 1 - cipherTextPlatform.state
-                            textField.text = codeField.text
-                            codeField.text = ""
-                        }
+                    WStateButton {
+                        id: bytesBtn
+                        text: "Bytes"
+                        group: [textBtn]
+                        onClicked: core.byteText = true
                     }
 
                     WButton {
@@ -390,7 +395,24 @@ Item {
                         color: "#ccffaa"
 
                         onClicked: {
-                            codeField.text = labCore2.process(core.cipherType, core.cipherMode, core.cipherPadding, vectorField.text, keyField.text, textField.text, cipherTextPlatform.direction)
+                            codeField.text = labCore2.process(
+                                        core.cipherType,
+                                        core.cipherMode,
+                                        core.cipherPadding,
+                                        vectorField.text,
+                                        keyField.text,
+                                        textField.text,
+                                        cipherTextPlatform.direction,
+                                        core.byteText)
+                        }
+                    }
+                    WButton {
+                        text: "Swap"
+
+                        onClicked: {
+                            cipherTextPlatform.state = 1 - cipherTextPlatform.state
+                            textField.text = codeField.text
+                            codeField.text = ""
                         }
                     }
 
@@ -416,7 +438,8 @@ Item {
                                         vectorField.text,
                                         keyField.text,
                                         source,
-                                        cipherTextPlatform.direction)
+                                        cipherTextPlatform.direction,
+                                        core.byteText)
                             var target = fileDialog.selectedFile + (cipherTextPlatform.state === "0" ? "-enc" : "-dec")
                             ioFile.write(target, encoded)
                             popUp.show((cipherTextPlatform.state === "0" ? "En" : "De") + "coded to\n" + target.substring(target.lastIndexOf("/") + 1))
