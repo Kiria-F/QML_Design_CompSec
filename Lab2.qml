@@ -266,8 +266,9 @@ Item {
                     WTextField {
                         id: vectorField
                         Layout.fillWidth: true
-                        maxTotalLength: core.cipherType.startsWith('AES') ? 16 : 8
                         hexFilter: true
+                        forceUpper: true
+                        maxTotalLength: core.cipherType.startsWith('AES') ? 32 : 16
                     }
 
                     WButton {
@@ -291,6 +292,14 @@ Item {
                     WTextField {
                         id: keyField
                         Layout.fillWidth: true
+                        hexFilter: true
+                        forceUpper: true
+                        property var keyLen: { "DES": 16, "3DES": 32, "AES128": 32, "AES256": 64, "": 64 }
+                        maxTotalLength: keyLen[core.cipherType]
+                        lineWidth: 32
+                        lineWidthAuto: false
+                        strictLineWidth: true
+                        linesAuto: true
                     }
 
                     WButton {

@@ -8,6 +8,7 @@ Item {
     property alias cursorPosition: wTextFieldText.cursorPosition
     property int maxTotalLength: -1
     property real lines: 1
+    property int maxLines: lines
     property bool linesAuto: false
     property real lineWidth: 10
     property bool strictLineWidth: false
@@ -16,13 +17,9 @@ Item {
     property bool forceUpper: false
     property alias horizontalAlignment: wTextFieldText.horizontalAlignment
     property bool readonly: false
+    property bool lineWidthAuto: true
     height: lines * 26 + 14
     width: lineWidth * 12 + 20
-
-    // function changeLines(newLines: real) {
-    //     heightAnimation.targetHeight = newLines * 26 + 14
-    //     heightAnimation.restart()
-    // }
 
     Component.onCompleted: {
         wTextFieldText.textChanged.connect(textChanged)
@@ -35,8 +32,10 @@ Item {
     }
 
     onWidthChanged: {
-        lineWidth = (width - 20) / 12
+        if (lineWidthAuto) lineWidth = (width - 20) / 12
     }
+
+    onMaxTotalLengthChanged: wTextFieldText.validate()
 
     // transitions: [
     //     Transition {
@@ -86,17 +85,17 @@ Item {
             }
             selectionColor: constants.strongTextColor
 
-            function setTextWidth() {
+            function setTextWidth(textIn: string) {
                 let lineWidth = Math.round(wTextField.lineWidth)
                 let lineIndex = 0
-                for (let i = 0; i < text.length; ++i) {
-                    if (text[i] === '\n') {
-                        if (lineIndex === lineWidth && i !== text.length - 1) {
+                for (let i = 0; i < textIn.length; ++i) {
+                    if (textIn[i] === '\n') {
+                        if (lineIndex === lineWidth && i !== textIn.length - 1) {
                             lineIndex = 0
                             continue
                         }
                         if (wTextField.strictLineWidth) {
-                            text = text.slice(0, i) + text.slice(i + 1)
+                            textIn = textIn.slice(0, i) + textIn.slice(i + 1)
                             --i
                         } else {
                             lineIndex = 0
@@ -104,50 +103,60 @@ Item {
                         continue
                     }
                     if (lineIndex === lineWidth) {
-                        text = text.slice(0, i) + '\n' + text.slice(i)
+                        textIn = textIn.slice(0, i) + '\n' + textIn.slice(i)
                         ++i
                         lineIndex = 0
+                        continue
                     }
                     ++lineIndex
                 }
+                return textIn
             }
 
-            function filter(rule: string) {
+            function filter(textIn: string, rule: string) {
                 rule += '\n'
-                for (let i = 0; i < text.length; ++i) {
-                    if (rule.indexOf(text[i]) === -1) {
-                        text = text.slice(0, i) + text.slice(i + 1)
+                for (let i = 0; i < textIn.length; ++i) {
+                    if (rule.indexOf(textIn[i]) === -1) {
+                        textIn = textIn.slice(0, i) + textIn.slice(i + 1)
                         --i
                     }
                 }
+                return textIn
             }
 
-            function limitTotalLength() {
+            function limitTotalLength(textIn: string) {
                 let maxLen = wTextField.maxTotalLength
                 if (strictLineWidth) {
                     maxLen += wTextField.lines - 1
                 }
-                text = text.substring(0, maxLen)
+                return textIn.substring(0, maxLen)
             }
 
-            onTextChanged: {
+            function validate() {
                 let pos = cursorPosition
-                let rawTextLen = text.length;
-                if (wTextField.forceUpper) text = text.toUpperCase()
-                if (wTextField.hexFilter) filter('0123456789abcdefABCDEF')
-                if (wTextField.numFilter) filter('0123456789')
-                setTextWidth(wTextField.lineWidth)
-                if (wTextField.maxTotalLength >= 0) limitTotalLength()
-                if (wTextField.linesAuto) wTextField.lines = text.split('\n').length
+                let textLocal = text
+                let rawTextLen = textLocal.length;
+                if (wTextField.forceUpper) textLocal = textLocal.toUpperCase()
+                if (wTextField.hexFilter) textLocal = filter(textLocal, '0123456789abcdefABCDEF')
+                if (wTextField.numFilter) textLocal = filter(textLocal, '0123456789')
+                textLocal = setTextWidth(textLocal, wTextField.lineWidth)
+                if (wTextField.maxTotalLength >= 0) textLocal = limitTotalLength(textLocal)
+                if (wTextField.linesAuto) {
+                    wTextField.lines = textLocal.split('\n').length
+                    wTextField.lines = Math.min(wTextField.maxLines, wTextField.lines)
+                }
                 else {
-                    let splittedText = text.split('\n')
-                    text = splittedText[0]
+                    let splittedText = textLocal.split('\n')
+                    textLocal = splittedText[0]
                     for (let i = 1; i < wTextField.lines; ++i) {
-                        text += '\n' + splittedText[i]
+                        textLocal += '\n' + splittedText[i]
                     }
                 }
+                text = textLocal
                 cursorPosition = pos - (rawTextLen - text.length)
             }
+
+            onTextChanged: validate()
 
             PlaceholderText {
                 id: wTextFieldPlaceholder
