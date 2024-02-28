@@ -139,6 +139,13 @@ Item {
                 setTextWidth(wTextField.lineWidth)
                 if (wTextField.maxTotalLength >= 0) limitTotalLength()
                 if (wTextField.linesAuto) wTextField.lines = text.split('\n').length
+                else {
+                    let splittedText = text.split('\n')
+                    text = splittedText[0]
+                    for (let i = 1; i < wTextField.lines; ++i) {
+                        text += '\n' + splittedText[i]
+                    }
+                }
                 cursorPosition = pos - (rawTextLen - text.length)
             }
 

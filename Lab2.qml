@@ -266,6 +266,8 @@ Item {
                     WTextField {
                         id: vectorField
                         Layout.fillWidth: true
+                        maxTotalLength: core.cipherType.startsWith('AES') ? 16 : 8
+                        hexFilter: true
                     }
 
                     WButton {
