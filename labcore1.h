@@ -34,8 +34,6 @@ class LabCore1 : public QObject
 
 public:
     explicit LabCore1(QObject *parent = nullptr);
-    Q_INVOKABLE QString validateKey(QString key);
-    Q_INVOKABLE QString validateHash(QString hashType, QString hash);
     Q_INVOKABLE QString hash(QString mode, QString key);
     Q_INVOKABLE void restore(QString mode, QString tasrgetHash);
 

@@ -6,15 +6,25 @@ Item {
     property string placeholder
     property alias text: wTextFieldText.text
     property alias cursorPosition: wTextFieldText.cursorPosition
+    property int maxTotalLength: -1
     property real lines: 1
-    property real length: 10
+    property bool linesAuto: false
+    property real lineWidth: 10
+    property bool strictLineWidth: false
+    property bool hexFilter: false
+    property bool numFilter: false
+    property bool forceUpper: false
     property alias horizontalAlignment: wTextFieldText.horizontalAlignment
     property bool readonly: false
     height: lines * 26 + 14
-    width: length * 12 + 20
+    width: lineWidth * 12 + 20
 
     Component.onCompleted: {
         wTextFieldText.textChanged.connect(textChanged)
+    }
+
+    onWidthChanged: {
+        lineWidth = (width - 20) / 12
     }
 
     Rectangle {
@@ -25,6 +35,7 @@ Item {
             width: 2
             color: wTextField.readonly ? constants.weakTextColor : constants.strongTextColor
         }
+        clip: true
 
         TextEdit {
             id: wTextFieldText
@@ -43,6 +54,61 @@ Item {
                 pixelSize: constants.fontSize
             }
             selectionColor: constants.strongTextColor
+
+            function setTextWidth() {
+                let lineWidth = Math.round(wTextField.lineWidth)
+                let lineIndex = 0
+                for (let i = 0; i < text.length; ++i) {
+                    if (text[i] === '\n') {
+                        if (lineIndex === lineWidth && i !== text.length - 1) {
+                            lineIndex = 0
+                            continue
+                        }
+                        if (wTextField.strictLineWidth) {
+                            text = text.slice(0, i) + text.slice(i + 1)
+                            --i
+                        } else {
+                            lineIndex = 0
+                        }
+                        continue
+                    }
+                    if (lineIndex === lineWidth) {
+                        text = text.slice(0, i) + '\n' + text.slice(i)
+                        ++i
+                        lineIndex = 0
+                    }
+                    ++lineIndex
+                }
+            }
+
+            function filter(rule: string) {
+                rule += '\n'
+                for (let i = 0; i < text.length; ++i) {
+                    if (rule.indexOf(text[i]) === -1) {
+                        text = text.slice(0, i) + text.slice(i + 1)
+                        --i
+                    }
+                }
+            }
+
+            function limitTotalLength() {
+                let maxLen = wTextField.maxTotalLength
+                if (strictLineWidth) {
+                    maxLen += wTextField.lines - 1
+                }
+                text = text.substring(0, maxLen)
+            }
+
+            onTextChanged: {
+                let pos = cursorPosition
+                let rawTextLen = text.length;
+                if (wTextField.forceUpper) text = text.toUpperCase()
+                if (wTextField.hexFilter) filter('0123456789abcdefABCDEF')
+                if (wTextField.numFilter) filter('0123456789')
+                setTextWidth(wTextField.lineWidth)
+                if (wTextField.maxTotalLength >= 0) limitTotalLength()
+                cursorPosition = pos - (rawTextLen - text.length)
+            }
 
             PlaceholderText {
                 id: wTextFieldPlaceholder

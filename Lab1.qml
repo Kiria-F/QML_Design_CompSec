@@ -47,23 +47,23 @@ Item {
     WTextField {
         id: keyField
         lines: 1
-        length: 7
+        lineWidth: 7
+        maxTotalLength: 7
+        numFilter: true
         x: 150 - width / 2
         anchors.verticalCenter: parent.verticalCenter
         placeholder: "0000000"
         horizontalAlignment: TextEdit.AlignHCenter
-        onTextChanged: {
-            let pos = cursorPosition
-            let aLen = text.length;
-            text = labCore1.validateKey(text);
-            cursorPosition = pos - (aLen - text.length)
-        }
     }
 
     WTextField {
         id: hashField
         lines: 2
-        length: 16
+        maxTotalLength: 32
+        lineWidth: 16
+        strictLineWidth: true
+        hexFilter: true
+        forceUpper: true
         x: parent.width - 150 - width / 2
         anchors.verticalCenter: parent.verticalCenter
         states: [
@@ -72,6 +72,7 @@ Item {
                 PropertyChanges {
                     target: hashField
                     lines: 2
+                    maxTotalLength: 32
                 }
             },
             State {
@@ -79,6 +80,7 @@ Item {
                 PropertyChanges {
                     target: hashField
                     lines: 3
+                    maxTotalLength: 40
                 }
             },
             State {
@@ -86,6 +88,7 @@ Item {
                 PropertyChanges {
                     target: hashField
                     lines: 4
+                    maxTotalLength: 64
                 }
             },
             State {
@@ -93,6 +96,7 @@ Item {
                 PropertyChanges {
                     target: hashField
                     lines: 8
+                    maxTotalLength: 128
                 }
             }
         ]
@@ -106,13 +110,6 @@ Item {
                 }
             }
         ]
-
-        onTextChanged: {
-            let pos = cursorPosition
-            let aLen = text.length;
-            text = labCore1.validateHash(hashField.state, text);
-            cursorPosition = pos - (aLen - text.length)
-        }
     }
 
     Column {
@@ -121,9 +118,9 @@ Item {
         anchors.centerIn: parent
         property list<var> btnGroup: [btnMD5, btnSHA1, btnSHA256, btnSHA512]
 
-        function commonHandler() {
-            hashField.text = labCore1.validateHash(hashField.state, hashField.text);
-        }
+        // function commonHandler() {
+        //     hashField.text = labCore1.validateHash(hashField.state, hashField.text);
+        // }
 
         Row {
             spacing: 10
@@ -135,7 +132,7 @@ Item {
 
                 onClicked: {
                     hashField.state = "MD5"
-                    buttonsContainer.commonHandler()
+                    // buttonsContainer.commonHandler()
                 }
             }
 
@@ -146,7 +143,7 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA1"
-                    buttonsContainer.commonHandler()
+                    // buttonsContainer.commonHandler()
                 }
             }
         }
@@ -161,7 +158,7 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA256"
-                    buttonsContainer.commonHandler()
+                    // buttonsContainer.commonHandler()
                 }
             }
 
@@ -172,7 +169,7 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA512"
-                    buttonsContainer.commonHandler()
+                    // buttonsContainer.commonHandler()
                 }
             }
         }
