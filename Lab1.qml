@@ -118,10 +118,6 @@ Item {
         anchors.centerIn: parent
         property list<var> btnGroup: [btnMD5, btnSHA1, btnSHA256, btnSHA512]
 
-        // function commonHandler() {
-        //     hashField.text = labCore1.validateHash(hashField.state, hashField.text);
-        // }
-
         Row {
             spacing: 10
 
@@ -132,7 +128,6 @@ Item {
 
                 onClicked: {
                     hashField.state = "MD5"
-                    // buttonsContainer.commonHandler()
                 }
             }
 
@@ -143,7 +138,6 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA1"
-                    // buttonsContainer.commonHandler()
                 }
             }
         }
@@ -158,7 +152,6 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA256"
-                    // buttonsContainer.commonHandler()
                 }
             }
 
@@ -169,7 +162,6 @@ Item {
 
                 onClicked: {
                     hashField.state = "SHA512"
-                    // buttonsContainer.commonHandler()
                 }
             }
         }
