@@ -48,6 +48,7 @@ Item {
         id: keyField
         lines: 1
         lineWidth: 7
+        strictLineWidth: true
         maxTotalLength: 7
         numFilter: true
         x: 150 - width / 2
@@ -97,16 +98,6 @@ Item {
                     target: hashField
                     lines: 8
                     maxTotalLength: 128
-                }
-            }
-        ]
-
-        transitions: [
-            Transition {
-                NumberAnimation {
-                    property: "lines"
-                    easing.type: Easing.InOutQuad
-                    duration: 400
                 }
             }
         ]

@@ -19,12 +19,43 @@ Item {
     height: lines * 26 + 14
     width: lineWidth * 12 + 20
 
+    // function changeLines(newLines: real) {
+    //     heightAnimation.targetHeight = newLines * 26 + 14
+    //     heightAnimation.restart()
+    // }
+
     Component.onCompleted: {
         wTextFieldText.textChanged.connect(textChanged)
+        height = lines * 26 + 14
+    }
+
+    onLinesChanged: {
+        heightAnimation.targetLines = lines
+        heightAnimation.restart()
     }
 
     onWidthChanged: {
         lineWidth = (width - 20) / 12
+    }
+
+    // transitions: [
+    //     Transition {
+    //         PropertyAnimation {
+    //             properties: 'height'
+    //             duration: 400
+    //             easing.type: Easing.InOutQuad
+    //         }
+    //     }
+    // ]
+
+    PropertyAnimation {
+        id: heightAnimation
+        property real targetLines
+        target: wTextField
+        property: "height"
+        to: targetLines * 26 + 14
+        duration: 400
+        easing.type: Easing.InOutQuad
     }
 
     Rectangle {
@@ -107,6 +138,7 @@ Item {
                 if (wTextField.numFilter) filter('0123456789')
                 setTextWidth(wTextField.lineWidth)
                 if (wTextField.maxTotalLength >= 0) limitTotalLength()
+                if (wTextField.linesAuto) wTextField.lines = text.split('\n').length
                 cursorPosition = pos - (rawTextLen - text.length)
             }
 
