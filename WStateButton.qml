@@ -8,7 +8,7 @@ Item {
     property color color: "white"
     property list<var> group
     property bool disabledCondition
-    property bool pressed: false
+    property bool pressed: state === 'pressed'
     property bool disabled: false
     height: 40
     width: 100
