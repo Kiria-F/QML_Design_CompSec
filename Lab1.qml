@@ -259,7 +259,7 @@ Item {
             } else if (hashField.state === "") {
                 popUp.show("Choose a hash method")
             } else {
-                labCore1.restore(hashField.state, hashField.text)
+                labCore1.restore(hashField.state, hashField.text.toLowerCase())
             }
         }
     }

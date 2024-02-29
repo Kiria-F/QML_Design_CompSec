@@ -7,6 +7,7 @@ Item {
     property string cipherType
     property string cipherMode
     property string cipherPadding
+    property string direction: cipherTextPlatform.state === "0" ? "ENCRYPT" : "DECRYPT"
     property bool byteText
 
     Column {
@@ -300,6 +301,7 @@ Item {
                         lineWidthAuto: false
                         strictLineWidth: true
                         linesAuto: true
+                        Layout.preferredHeight: height
                     }
 
                     WButton {
@@ -319,7 +321,6 @@ Item {
             width: parent.width
             height: cipherTextColumn.height + 60
             state: "0"
-            property string direction: state === "0" ? "ENCRYPT" : "DECRYPT"
 
             states: [
                 State {
@@ -378,6 +379,8 @@ Item {
                     WTextField {
                         id: textField
                         Layout.fillWidth: true
+                        linesAuto: true
+                        Layout.preferredHeight: height
                     }
                 }
 
@@ -406,14 +409,16 @@ Item {
                         color: "#ccffaa"
 
                         onClicked: {
+                            let cipherText = textField.text
+                            if (core.direction === 'DECRYPT') cipherText = tools.removeAll(cipherText.toLowerCase(), '\n')
                             codeField.text = labCore2.process(
                                         core.cipherType,
                                         core.cipherMode,
                                         core.cipherPadding,
-                                        vectorField.text,
-                                        keyField.text,
-                                        textField.text,
-                                        cipherTextPlatform.direction,
+                                        vectorField.text.toLowerCase(),
+                                        tools.removeAll(keyField.text.toLowerCase(), '\n'),
+                                        cipherText,
+                                        core.direction,
                                         core.byteText)
                         }
                     }
@@ -449,11 +454,11 @@ Item {
                                         vectorField.text,
                                         keyField.text,
                                         source,
-                                        cipherTextPlatform.direction,
+                                        core.direction,
                                         core.byteText)
-                            var target = fileDialog.selectedFile + (cipherTextPlatform.state === "0" ? "-enc" : "-dec")
+                            var target = fileDialog.selectedFile + (core.direction === "ENCRYPT" ? "-enc" : "-dec")
                             ioFile.write(target, encoded)
-                            popUp.show((cipherTextPlatform.state === "0" ? "En" : "De") + "coded to\n" + target.substring(target.lastIndexOf("/") + 1))
+                            popUp.show((core.direction === "ENCRYPT" ? "En" : "De") + "coded to\n" + target.substring(target.lastIndexOf("/") + 1))
                         }
                     }
                 }
@@ -470,7 +475,9 @@ Item {
                     WTextField {
                         id: codeField
                         Layout.fillWidth: true
+                        Layout.preferredHeight: height
                         readonly: true
+                        linesAuto: true
                     }
                 }
             }

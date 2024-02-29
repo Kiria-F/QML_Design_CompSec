@@ -8,6 +8,7 @@
 #include "labcore2.h"
 #include "iofile.h"
 #include "constants.h"
+#include "qmltools.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     QMap<QString, QObject*> integrations {
         { "constants", new Constants(&app) },
+        { "tools", new QMLTools(&app) },
         { "geometry", new Geometry(&app) },
         { "ioFile", new IOFile(&app) },
         { "ioFile", new IOFile(&app) },

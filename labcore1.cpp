@@ -57,7 +57,6 @@ void RestoreTask::run() {
 }
 
 void LabCore1::restore(QString mode, QString targetHash) {
-    targetHash = targetHash.toLower();
     auto task = new RestoreTask(this, mode, targetHash, true);
     QObject::connect(task, &RestoreTask::restored, this, &LabCore1::keyFound);
     QThreadPool::globalInstance()->start(task);

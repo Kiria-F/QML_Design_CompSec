@@ -22,7 +22,6 @@ Item {
     width: lineWidth * 12 + 20
 
     Component.onCompleted: {
-        wTextFieldText.textChanged.connect(textChanged)
         height = lines * 26 + 14
     }
 
@@ -140,20 +139,22 @@ Item {
                 if (wTextField.hexFilter) textLocal = filter(textLocal, '0123456789abcdefABCDEF')
                 if (wTextField.numFilter) textLocal = filter(textLocal, '0123456789')
                 textLocal = setTextWidth(textLocal, wTextField.lineWidth)
-                if (wTextField.maxTotalLength >= 0) textLocal = limitTotalLength(textLocal)
                 if (wTextField.linesAuto) {
                     wTextField.lines = textLocal.split('\n').length
                     wTextField.lines = Math.min(wTextField.maxLines, wTextField.lines)
                 }
+                if (wTextField.maxTotalLength >= 0) textLocal = limitTotalLength(textLocal)
                 else {
                     let splittedText = textLocal.split('\n')
                     textLocal = splittedText[0]
-                    for (let i = 1; i < wTextField.lines; ++i) {
+                    for (let i = 1; i < Math.min(wTextField.lines, splittedText.length); ++i) {
                         textLocal += '\n' + splittedText[i]
                     }
                 }
-                text = textLocal
-                cursorPosition = pos - (rawTextLen - text.length)
+                if (text !== textLocal) {
+                    text = textLocal
+                    cursorPosition = pos - (rawTextLen - text.length)
+                }
             }
 
             onTextChanged: validate()
