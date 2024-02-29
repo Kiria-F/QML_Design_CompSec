@@ -34,6 +34,10 @@ Item {
         if (lineWidthAuto) lineWidth = (width - 20) / 12
     }
 
+    onHexFilterChanged: wTextFieldText.validate()
+    onNumFilterChanged: wTextFieldText.validate()
+    onStrictLineWidthChanged: wTextFieldText.validate()
+
     onMaxTotalLengthChanged: wTextFieldText.validate()
 
     // transitions: [

@@ -10,6 +10,17 @@ Item {
     property string direction: cipherTextPlatform.state === "0" ? "ENCRYPT" : "DECRYPT"
     property bool byteText
 
+    function checkRequirements() {
+        if (cipherType == "") return "Select cipher type"
+        if (cipherMode == "") return "Select cipher mode"
+        if (cipherPadding == "") return "Select cipher padding"
+        if (tools.removeAll(vectorField.text, '\n').length < vectorField.maxTotalLength) return "Input initial vector"
+        if (tools.removeAll(keyField.text, '\n').length < keyField.maxTotalLength) return "Input key"
+        if (textField.text.length === 0) return "Input text"
+        if (!textBtn.pressed && !bytesBtn.pressed) return "Select input data type"
+        return ""
+    }
+
     Column {
         spacing: 20
         anchors.centerIn: parent
@@ -381,6 +392,9 @@ Item {
                         Layout.fillWidth: true
                         linesAuto: true
                         Layout.preferredHeight: height
+
+                        hexFilter: core.byteText
+                        strictLineWidth: core.byteText
                     }
                 }
 
@@ -406,20 +420,25 @@ Item {
                         id: runBtn
                         text: "Encrypt"
                         width: 200
-                        color: "#ccffaa"
+                        color: "#aaffaa"
 
                         onClicked: {
                             let cipherText = textField.text
-                            if (core.direction === 'DECRYPT') cipherText = tools.removeAll(cipherText.toLowerCase(), '\n')
-                            codeField.text = labCore2.process(
-                                        core.cipherType,
-                                        core.cipherMode,
-                                        core.cipherPadding,
-                                        vectorField.text.toLowerCase(),
-                                        tools.removeAll(keyField.text.toLowerCase(), '\n'),
-                                        cipherText,
-                                        core.direction,
-                                        core.byteText)
+                            if (core.direction == 'DECRYPT') cipherText = tools.removeAll(cipherText.toLowerCase(), '\n')
+                            let warning = core.checkRequirements()
+                            if (warning === '') {
+                                codeField.text = labCore2.process(
+                                            core.cipherType,
+                                            core.cipherMode,
+                                            core.cipherPadding,
+                                            vectorField.text.toLowerCase(),
+                                            tools.removeAll(keyField.text.toLowerCase(), '\n'),
+                                            cipherText,
+                                            core.direction,
+                                            core.byteText)
+                            } else {
+                                popUp.show(warning)
+                            }
                         }
                     }
                     WButton {
@@ -435,9 +454,15 @@ Item {
                     WButton {
                         id: fileBtn
                         text: "File"
+                        color: '#aaffaa'
 
                         onClicked: {
-                            fileDialog.open()
+                            let warning = core.checkRequirements()
+                            if (warning === '') {
+                                fileDialog.open()
+                            } else {
+                                popUp.show(warning)
+                            }
                         }
                     }
 
@@ -487,5 +512,6 @@ Item {
     WPopUp {
         id: popUp
         anchors.centerIn: parent
+        width: 500
     }
 }
