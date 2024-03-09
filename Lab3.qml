@@ -25,6 +25,7 @@ Item {
                 }
 
                 WTextField {
+                    id: plainTextField
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: parent.width - 40
                     linesAuto: true
@@ -91,7 +92,7 @@ Item {
 
                         WButton {
                             text: 'Expand'
-                            onClicked: popUp.show(publicKeyTextField.key)
+                            onClicked: popUp.show(publicKeyTextField.key.substring(0, publicKeyTextField.key.length - 1))
                         }
                     }
 
@@ -129,7 +130,7 @@ Item {
 
                         WButton {
                             text: 'Expand'
-                            onClicked: popUp.show(privateKeyTextField.key)
+                            onClicked: popUp.show(privateKeyTextField.key.substring(0, privateKeyTextField.key.length - 1))
                         }
                     }
                 }
@@ -142,14 +143,18 @@ Item {
             width: 150
             text: 'Encrypt'
             color: '#aaffaa'
+
+            onClicked: {
+                labCore3.encrypt(plainTextField.text, publicKeyTextField.key)
+            }
         }
 
         WPlatform {
             width: parent.width
-            height: textEncContainer.height + 40
+            height: encryptedTextContainer.height + 40
 
             Column {
-                id: textEncContainer
+                id: encryptedTextContainer
                 width: parent.width - 40
                 anchors.centerIn: parent
                 spacing: 20
@@ -160,10 +165,23 @@ Item {
                 }
 
                 WTextField {
+                    id: encryptedTextField
                     width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
                     linesAuto: true
+                    forceUpper: true
+                    strictLineWidth: true
+                    property string rawText
+
+                    Connections {
+                        target: labCore3
+
+                        function onEncrypted(text: string) {
+                            encryptedTextField.rawText = text
+                            encryptedTextField.text = text
+                        }
+                    }
                 }
             }
         }
@@ -173,14 +191,18 @@ Item {
             width: 150
             text: 'Decrypt'
             color: '#aaffaa'
+
+            onClicked: {
+                labCore3.decrypt(encryptedTextField.rawText, privateKeyTextField.key)
+            }
         }
 
         WPlatform {
             width: parent.width
-            height: textDecContainer.height + 40
+            height: decrypedTextContainer.height + 40
 
             Column {
-                id: textDecContainer
+                id: decrypedTextContainer
                 width: parent.width - 40
                 anchors.centerIn: parent
                 spacing: 20
@@ -191,10 +213,19 @@ Item {
                 }
 
                 WTextField {
+                    id: decryptedTextField
                     width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
                     linesAuto: true
+
+                    Connections {
+                        target: labCore3
+
+                        function onDecrypted(text: string) {
+                            decryptedTextField.text = text
+                        }
+                    }
                 }
             }
         }

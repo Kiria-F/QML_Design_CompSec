@@ -5,6 +5,7 @@ Item {
     id: wTextField
     property string placeholder
     property alias text: wTextFieldText.text
+    property alias font: wTextFieldText.font
     property alias cursorPosition: wTextFieldText.cursorPosition
     property int maxTotalLength: -1
     property real lines: 1
