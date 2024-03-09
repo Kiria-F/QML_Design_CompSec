@@ -6,28 +6,23 @@
 
 class LabCore1;
 
-class RestoreTask : public QObject, public QRunnable
-{
+class RestoreTask : public QObject, public QRunnable {
     Q_OBJECT
-    LabCore1* core;
+    LabCore1 *core;
     QString mode;
     QString targetHash;
     bool displayProgress;
 
 public:
-    RestoreTask(LabCore1* core, QString mode, QString targetHash, bool displayProgress) :
-        core(core),
-        mode(mode),
-        targetHash(targetHash),
-        displayProgress(displayProgress) {}
+    RestoreTask(LabCore1 *core, QString mode, QString targetHash, bool displayProgress)
+        : core(core), mode(mode), targetHash(targetHash), displayProgress(displayProgress) {}
     void run() override;
 
 signals:
     void restored(QString key, int ms, QString mode);
 };
 
-class LabCore1 : public QObject
-{
+class LabCore1 : public QObject {
     Q_OBJECT
     friend RestoreTask;
     const float progressStep = 0.005;

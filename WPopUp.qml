@@ -9,6 +9,7 @@ Item {
     width: 400
     height: 200
     visible: false
+    property alias text: wPopUpText
 
     signal hidden()
 

@@ -6,6 +6,7 @@
 #include "geometry.h"
 #include "labcore1.h"
 #include "labcore2.h"
+#include "labcore3.h"
 #include "iofile.h"
 #include "constants.h"
 #include "qmltools.h"
@@ -27,7 +28,8 @@ int main(int argc, char *argv[])
         { "ioFile", new IOFile(&app) },
         { "ioFile", new IOFile(&app) },
         { "labCore1", new LabCore1(&app) },
-        { "labCore2", new LabCore2(&app) }
+        { "labCore2", new LabCore2(&app) },
+        { "labCore3", new LabCore3(&app) }
     };
     for (auto integration = integrations.constKeyValueBegin(); integration != integrations.constKeyValueEnd(); ++integration) {
         engine.rootContext()->setContextProperty(integration->first, integration->second);
