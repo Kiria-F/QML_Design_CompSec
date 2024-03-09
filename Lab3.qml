@@ -5,7 +5,7 @@ import QtQuick.Controls
 Item {
 
     Column {
-        width: 800
+        width: encryptedTextContainer.width
         anchors.centerIn: parent
         spacing: 20
 
@@ -43,14 +43,32 @@ Item {
                 anchors.centerIn: parent
                 spacing: 20
 
-                WButton {
-                    text: 'Generate'
-                    width: 120
+                Column {
+                    spacing: 20
 
-                    onClicked: {
-                        publicKeyTextFieldBusy.running = true
-                        privateKeyTextFieldBusy.running = true
-                        labCore3.generatePair(2048);
+                    RowLayout {
+                        spacing: 10
+
+                        WText {
+                            text: 'Size'
+                        }
+
+                        WTextField {
+                            id: keySizeTextField
+                            lineWidth: 4
+                            text: '2048'
+                        }
+                    }
+
+                    WButton {
+                        text: 'Generate'
+                        width: 120
+
+                        onClicked: {
+                            publicKeyTextFieldBusy.running = true
+                            privateKeyTextFieldBusy.running = true
+                            labCore3.generatePair(keySizeTextField.text);
+                        }
                     }
                 }
 
@@ -150,12 +168,12 @@ Item {
         }
 
         WPlatform {
-            width: parent.width
+            width: encryptedTextContainer.width
             height: encryptedTextContainer.height + 40
 
             Column {
                 id: encryptedTextContainer
-                width: parent.width - 40
+                width: encryptedTextField.width + 40
                 anchors.centerIn: parent
                 spacing: 20
 
@@ -166,12 +184,12 @@ Item {
 
                 WTextField {
                     id: encryptedTextField
-                    width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
                     linesAuto: true
                     forceUpper: true
                     strictLineWidth: true
+                    lineWidth: 64
                     property string rawText
 
                     Connections {
