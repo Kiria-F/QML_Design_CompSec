@@ -36,6 +36,7 @@ public:
     QString publicKey;
 
     explicit LabCore3(QObject *parent = nullptr);
+    ~LabCore3();
 
 public slots:
     void generatePair(int bits);

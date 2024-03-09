@@ -15,6 +15,11 @@ LabCore3::LabCore3(QObject *parent) : QObject{parent} {
     workerThread.start();
 }
 
+LabCore3::~LabCore3() {
+    workerThread.quit();
+    workerThread.wait();
+}
+
 void Worker::generatePair(int bits) {
     QCA::KeyGenerator generator;
     QCA::PrivateKey privateKey = generator.createRSA(bits);

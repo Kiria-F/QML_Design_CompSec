@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 
 Item {
 
@@ -8,25 +9,35 @@ Item {
         anchors.centerIn: parent
         spacing: 20
 
-        RowLayout {
+        WPlatform {
             width: parent.width
-            spacing: 20
+            height: textContainer.height + 40
 
-            WText {
-                text: 'Plain Text'
-            }
+            Column {
+                id: textContainer
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 20
 
-            WTextField {
-                Layout.fillWidth: true
+                WText {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: 'Plain Text'
+                }
+
+                WTextField {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: parent.width - 40
+                    linesAuto: true
+                }
             }
         }
 
         WPlatform {
             width: parent.width
-            height: keysPlatform.height + 40
+            height: keysContainer.height + 40
 
             RowLayout {
-                id: keysPlatform
+                id: keysContainer
                 width: parent.width - 40
                 anchors.centerIn: parent
                 spacing: 20
@@ -36,7 +47,9 @@ Item {
                     width: 120
 
                     onClicked: {
-                        labCore3.generatePair(4096);
+                        publicKeyTextFieldBusy.running = true
+                        privateKeyTextFieldBusy.running = true
+                        labCore3.generatePair(2048);
                     }
                 }
 
@@ -62,9 +75,17 @@ Item {
                                 target: labCore3
 
                                 function onPublicKeyGenerated(key: string) {
+                                    publicKeyTextFieldBusy.running = false
                                     publicKeyTextField.key = key;
                                     publicKeyTextField.text = '…' + key.substring(32)
                                 }
+                            }
+
+                            BusyIndicator {
+                                id: publicKeyTextFieldBusy
+                                anchors.centerIn: parent
+                                scale: 0.8
+                                running: false
                             }
                         }
 
@@ -83,12 +104,32 @@ Item {
                         }
 
                         WTextField {
+                            id: privateKeyTextField
                             Layout.fillWidth: true
                             readonly: true
+                            property string key
+
+                            Connections {
+                                target: labCore3
+
+                                function onPrivateKeyGenerated(key: string) {
+                                    privateKeyTextFieldBusy.running = false
+                                    privateKeyTextField.key = key;
+                                    privateKeyTextField.text = '…' + key.substring(32)
+                                }
+                            }
+
+                            BusyIndicator {
+                                id: privateKeyTextFieldBusy
+                                anchors.centerIn: parent
+                                scale: 0.8
+                                running: false
+                            }
                         }
 
                         WButton {
                             text: 'Expand'
+                            onClicked: popUp.show(privateKeyTextField.key)
                         }
                     }
                 }
@@ -105,10 +146,10 @@ Item {
 
         WPlatform {
             width: parent.width
-            height: textEncColumn.height + 40
+            height: textEncContainer.height + 40
 
             Column {
-                id: textEncColumn
+                id: textEncContainer
                 width: parent.width - 40
                 anchors.centerIn: parent
                 spacing: 20
@@ -122,6 +163,7 @@ Item {
                     width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
+                    linesAuto: true
                 }
             }
         }
@@ -135,10 +177,10 @@ Item {
 
         WPlatform {
             width: parent.width
-            height: textDecColumn.height + 40
+            height: textDecContainer.height + 40
 
             Column {
-                id: textDecColumn
+                id: textDecContainer
                 width: parent.width - 40
                 anchors.centerIn: parent
                 spacing: 20
@@ -152,6 +194,7 @@ Item {
                     width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
+                    linesAuto: true
                 }
             }
         }
@@ -160,8 +203,8 @@ Item {
     WPopUp {
         id: popUp
         anchors.centerIn: parent
-        width: 800
-        height: 800
+        width: text.width + 60
+        height: text.height + 60
         autohide: false
         text.font.pixelSize: 18
     }

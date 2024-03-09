@@ -50,16 +50,10 @@ Item {
             }
         }
 
-        Text {
+        WText {
             id: wPopUpText
             anchors.centerIn: parent
-            color: constants.weakTextColor
             horizontalAlignment: Text.AlignHCenter
-            font {
-                family: constants.fontFamily
-                bold: true
-                pixelSize: 30
-            }
         }
     }
 
