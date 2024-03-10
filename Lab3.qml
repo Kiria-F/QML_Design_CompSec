@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 Item {
 
@@ -152,18 +153,44 @@ Item {
                         }
                     }
                 }
-
             }
         }
 
-        WButton {
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 150
-            text: 'Encrypt'
-            color: '#aaffaa'
+            spacing: 20
 
-            onClicked: {
-                labCore3.encrypt(plainTextField.text, publicKeyTextField.key)
+            WButton {
+                width: 150
+                text: 'Encrypt'
+                color: '#aaffaa'
+
+                onClicked: {
+                    encryptedTextField.rawText = labCore3.encrypt(plainTextField.text, publicKeyTextField.key)
+                    encryptedTextField.text = encryptedTextField.rawText
+                }
+            }
+
+            WButton {
+                width: 200
+                text: 'Encrypt file'
+
+                onClicked: {
+                    encryptFileDialog.open()
+                }
+
+                FileDialog {
+                    id: encryptFileDialog
+                    title: "Please choose a file"
+                    currentFolder: "file:///home/f/Documents"
+                    onAccepted: {
+                        var source = ioFile.read(encryptFileDialog.selectedFile)
+                        var encrypted = labCore3.encrypt(source, publicKeyTextField.key)
+                        var target = encryptFileDialog.selectedFile + "-enc"
+                        ioFile.write(target, encrypted)
+                        lightPopUp.show("Encrypted to\n" + target.substring(target.lastIndexOf("/") + 1))
+                    }
+                }
             }
         }
 
@@ -191,27 +218,44 @@ Item {
                     strictLineWidth: true
                     lineWidth: 64
                     property string rawText
-
-                    Connections {
-                        target: labCore3
-
-                        function onEncrypted(text: string) {
-                            encryptedTextField.rawText = text
-                            encryptedTextField.text = text
-                        }
-                    }
                 }
             }
         }
 
-        WButton {
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 150
-            text: 'Decrypt'
-            color: '#aaffaa'
+            spacing: 20
 
-            onClicked: {
-                labCore3.decrypt(encryptedTextField.rawText, privateKeyTextField.key)
+            WButton {
+                width: 150
+                text: 'Decrypt'
+                color: '#aaffaa'
+
+                onClicked: {
+                    decryptedTextField.text = labCore3.decrypt(encryptedTextField.rawText, privateKeyTextField.key)
+                }
+            }
+
+            WButton {
+                width: 200
+                text: 'Decrypt file'
+
+                onClicked: {
+                    decryptFileDialog.open()
+                }
+
+                FileDialog {
+                    id: decryptFileDialog
+                    title: "Please choose a file"
+                    currentFolder: "file:///home/f/Documents"
+                    onAccepted: {
+                        var source = ioFile.read(decryptFileDialog.selectedFile)
+                        var decrypted = labCore3.decrypt(source, privateKeyTextField.key)
+                        var target = decryptFileDialog.selectedFile + "-dec"
+                        ioFile.write(target, decrypted)
+                        lightPopUp.show("Decrypted to\n" + target.substring(target.lastIndexOf("/") + 1))
+                    }
+                }
             }
         }
 
@@ -236,17 +280,17 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     readonly: true
                     linesAuto: true
-
-                    Connections {
-                        target: labCore3
-
-                        function onDecrypted(text: string) {
-                            decryptedTextField.text = text
-                        }
-                    }
                 }
             }
         }
+    }
+
+    WPopUp {
+        id: lightPopUp
+        anchors.centerIn: parent
+        width: text.width + 200
+        height: text.height + 100
+        text.font.pixelSize: 25
     }
 
     WPopUp {

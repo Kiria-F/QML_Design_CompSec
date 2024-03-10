@@ -15,14 +15,10 @@ public:
 
 public slots:
     void generatePair(int bits);
-    void encrypt(QString text, QString publicKey);
-    void decrypt(QString text, QString privateKey);
 
 signals:
     void privateKeyGenerated(QString key);
     void publicKeyGenerated(QString key);
-    void encrypted(QString text);
-    void decrypted(QString text);
 };
 
 class LabCore3 : public QObject {
@@ -34,20 +30,16 @@ public:
     explicit LabCore3(QObject *parent = nullptr);
     ~LabCore3();
 
+    Q_INVOKABLE QString encrypt(QString text, QString publicKey);
+    Q_INVOKABLE QString decrypt(QString text, QString privateKey);
+
 public slots:
     void generatePair(int bits);
-    void encrypt(QString text, QString publicKey);
-    void decrypt(QString text, QString privateKey);
 
 signals:
     void privateKeyGenerated(QString key);
     void publicKeyGenerated(QString key);
-    void encrypted(QString text);
-    void decrypted(QString text);
-
     void workerGeneratePair(int bits);
-    void workerEncrypt(QString text, QString publicKey);
-    void workerDecrypt(QString text, QString privateKey);
 };
 
 #endif // LABCORE3_H
