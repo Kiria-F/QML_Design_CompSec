@@ -22,6 +22,8 @@ qt_add_qml_module(appComputerSecurityLabs
     SOURCES labcore1.h labcore1.cpp
     SOURCES geometry.h geometry.cpp
     SOURCES labcore2.h labcore2.cpp
+    SOURCES labcore3.h labcore3.cpp
+    SOURCES labcore4.h labcore4.cpp
     QML_FILES Main.qml
     QML_FILES Lab1.qml
     QML_FILES Lab2.qml
@@ -35,7 +37,6 @@ qt_add_qml_module(appComputerSecurityLabs
     QML_FILES WTextField.qml
     QML_FILES WPlatform.qml
     QML_FILES WText.qml
-    SOURCES labcore3.h labcore3.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
