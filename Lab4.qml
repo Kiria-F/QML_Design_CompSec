@@ -52,6 +52,7 @@ Item {
                         }
 
                         onClicked: {
+                            popUp.verified = labCore4.verify(certName.text)
                             popUp.show(labCore4.getOne(certName.text))
                         }
                     }
@@ -67,5 +68,13 @@ Item {
         height: text.height + 60
         autohide: false
         text.font.pixelSize: 18
+        property bool verified: true
+
+        WText {
+            anchors.centerIn: parent
+            text: popUp.verified ? "VERIFIED" : "ERROR"
+            color: popUp.verified ? "#6600ff00" : "#66ff0000"
+            font.pixelSize: constants.fontSize * 6
+        }
     }
 }

@@ -1,6 +1,8 @@
 #include "labcore4.h"
 #include <QDir>
 #include <QFile>
+#include <QSslCertificate>
+#include <QSslError>
 
 LabCore4::LabCore4(QObject *parent)
     : QObject{parent}
@@ -28,7 +30,11 @@ QList<QString> LabCore4::getAll() {
 QString LabCore4::getOne(QString certName) {
     QFile file(certsMap[certName]);
     if (file.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
-        return file.readAll();
+        return file.readAll().chopped(1);
     }
     return "Failed to read this certificate";
+}
+
+bool LabCore4::verify(QString certName) {
+    return QSslCertificate::verify(QSslCertificate::fromPath(certsMap[certName])).isEmpty();
 }

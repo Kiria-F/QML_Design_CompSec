@@ -12,6 +12,7 @@ public:
     explicit LabCore4(QObject *parent = nullptr);
     Q_INVOKABLE QList<QString> getAll();
     Q_INVOKABLE QString getOne(QString certName);
+    Q_INVOKABLE bool verify(QString certName);
 
 signals:
 };

@@ -5,6 +5,8 @@
 #include <QRunnable>
 #include <QThread>
 
+// for cert in $(ls -h /etc/ssl/certs); do openssl verify /etc/ssl/certs/$cert; done
+
 class LabCore3;
 
 class Worker : public QObject {
