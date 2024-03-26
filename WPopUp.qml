@@ -6,19 +6,19 @@ Item {
     z: 10
     opacity: 0
     property bool autohide: true
-    width: 400
-    height: 200
+    width: popUpText.width + 150
+    height: popUpText.height + 100
     visible: false
-    property alias text: wPopUpText
+    property alias text: popUpText
 
     signal hidden()
 
     function show(text = "") {
-        wPopUpText.text = text
+        popUpText.text = text
         visible = true
         if (autohide) wPopUpShowHideAnimation.restart()
         else wPopUpShowAnimation.restart()
-        wPopUpMA.enabled = true
+        mouseArea.enabled = true
     }
 
     function hide() {
@@ -33,7 +33,7 @@ Item {
     }
 
     Rectangle {
-        id: wPopUpRect
+        id: mainRect
         anchors.centerIn: parent
         radius: 20
         property real sizeMod: 0.9
@@ -42,7 +42,7 @@ Item {
         color: "white"
 
         MouseArea {
-            id: wPopUpMA
+            id: mouseArea
             enabled: false
             anchors.fill: parent
             onClicked: {
@@ -51,9 +51,10 @@ Item {
         }
 
         WText {
-            id: wPopUpText
+            id: popUpText
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: constants.fontSize * 1.3
         }
     }
 
@@ -63,7 +64,7 @@ Item {
         ParallelAnimation {
 
             PropertyAnimation {
-                target: wPopUpRect
+                target: mainRect
                 property: "sizeMod"
                 to: 1
                 duration: 300
@@ -88,7 +89,7 @@ Item {
             ParallelAnimation {
 
                 PropertyAnimation {
-                    target: wPopUpRect
+                    target: mainRect
                     property: "sizeMod"
                     to: 0.9
                     duration: 300
@@ -105,7 +106,7 @@ Item {
             }
 
             PropertyAction {
-                target: wPopUpMA
+                target: mouseArea
                 property: "enabled"
                 value: false
             }
@@ -124,7 +125,7 @@ Item {
         ParallelAnimation {
 
             PropertyAnimation {
-                target: wPopUpRect
+                target: mainRect
                 property: "sizeMod"
                 to: 1
                 duration: 300
@@ -141,7 +142,7 @@ Item {
         }
 
         PropertyAction {
-            target: wPopUpMA
+            target: mouseArea
             property: "enabled"
             value: true
         }
@@ -153,7 +154,7 @@ Item {
         ParallelAnimation {
 
             PropertyAnimation {
-                target: wPopUpRect
+                target: mainRect
                 property: "sizeMod"
                 to: 0.9
                 duration: 300
@@ -170,7 +171,7 @@ Item {
         }
 
         PropertyAction {
-            target: wPopUpMA
+            target: mouseArea
             property: "enabled"
             value: false
         }
@@ -183,8 +184,8 @@ Item {
     }
 
     MultiEffect {
-        source: wPopUpRect
-        anchors.fill: wPopUpRect
+        source: mainRect
+        anchors.fill: mainRect
         shadowEnabled: true
         shadowBlur: 1
         shadowScale: 1

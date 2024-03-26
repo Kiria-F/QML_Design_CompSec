@@ -512,6 +512,5 @@ Item {
     WPopUp {
         id: popUp
         anchors.centerIn: parent
-        width: 500
     }
 }
