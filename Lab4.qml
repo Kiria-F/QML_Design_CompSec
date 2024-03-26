@@ -23,7 +23,7 @@ Item {
             placeholder: 'Filter'
 
             onTextChanged: {
-                core.filtered = core.certs.filter((c) => true)
+                core.filtered = core.certs.filter(c => c.toLowerCase().includes(text.toLowerCase()))
             }
         }
 
@@ -39,7 +39,7 @@ Item {
                 }
 
                 ListView {
-                    model: labCore4.getAll()
+                    model: core.filtered
                     spacing: 10
                     delegate: ItemDelegate {
                         width: container.width
@@ -59,6 +59,7 @@ Item {
             }
         }
     }
+
     WPopUp {
         id: popUp
         anchors.centerIn: parent
