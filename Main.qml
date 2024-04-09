@@ -9,7 +9,7 @@ Window {
     Item {
         id: data
         visible: false
-        property int labCount: 5
+        property int labCount: 7
         property QtObject clickedButton
     }
 

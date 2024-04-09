@@ -4,6 +4,8 @@
 #include <QMap>
 #include <QObject>
 
+// for cert in $(ls -h /etc/ssl/certs); do openssl verify /etc/ssl/certs/$cert; done
+
 class LabCore4 : public QObject
 {
     Q_OBJECT
