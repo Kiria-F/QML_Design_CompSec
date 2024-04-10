@@ -1,8 +1,15 @@
 #include "labcore5.h"
+#include <QDebug>
+#include <QTimer>
+#include <QRandomGenerator>
 
 LabCore5::LabCore5(QObject *parent)
     : QObject{parent}
-{}
+{
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &LabCore5::timeout);
+    timer->start(1);
+}
 
 int LabCore5::generate(int rule, int prev) {
     int rBit = 0;
@@ -17,4 +24,18 @@ int LabCore5::generate(int rule, int prev) {
         ++lBitIndex;
     }
     return next | rBit << --lBitIndex;
+}
+
+void LabCore5::updateRule(int rule) {
+    timerRule = rule;
+    timerPrev = 1;
+}
+
+void LabCore5::timeout() {
+    int x = generate(timerRule, timerPrev);
+    int y = generate(timerRule, x);
+    // int x = rand() % 256;
+    // int y = rand() % 256;
+    timerPrev = y;
+    emit addPoint(x, y);
 }

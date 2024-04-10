@@ -7,6 +7,9 @@ Item {
     property list<int> rule: [1, 0, 0, 0, 1, 1, 1, 0, 1]
     property int ruleLen: rule.length
     property int bitsCount: ruleLen - 1
+    property bool componenetCompleted: false
+
+    Component.onCompleted: componenetCompleted = true
 
     function render(bitsSource) {
         let bits = bitsSource === 'rule' ? rule : number
@@ -18,6 +21,27 @@ Item {
             }
         }
         return acc
+    }
+
+    onRuleChanged: {
+        if (componenetCompleted) {
+            let context2d = canvas.getContext('2d')
+            context2d.fillStyle = Qt.rgba(1, 1, 1, 1)
+            context2d.fillRect(0, 0, canvas.width, canvas.height);
+            labCore5.updateRule(render('rule'));
+            canvas.requestPaint()
+        }
+    }
+
+    Connections {
+        target: labCore5
+
+        function onAddPoint(x, y) {
+            let context2d = canvas.getContext('2d')
+            context2d.fillStyle = Qt.rgba(0, 0, 0, 0.2)
+            context2d.fillRect(x, y, 2, 2);
+            canvas.requestPaint()
+        }
     }
 
     Column {
@@ -415,6 +439,24 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: constants.fontSize * 2
             text: core.render('num')
+        }
+
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: canvas.width + 4
+            height: canvas.width + 4
+            border {
+                width: 2
+                color: constants.weakTextColor
+            }
+
+            Canvas {
+                id: canvas
+                anchors.centerIn: parent
+                renderStrategy: Canvas.Threaded
+                width: 256
+                height: 256
+            }
         }
     }
 }
