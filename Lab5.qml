@@ -29,6 +29,7 @@ Item {
             context2d.fillStyle = Qt.rgba(1, 1, 1, 1)
             context2d.fillRect(0, 0, canvas.width, canvas.height);
             labCore5.updateRule(render('rule'));
+            loopLength.state = 'off'
             canvas.requestPaint()
         }
     }
@@ -41,6 +42,10 @@ Item {
             context2d.fillStyle = Qt.rgba(0, 0, 0, 0.2)
             context2d.fillRect(x, y, 2, 2);
             canvas.requestPaint()
+        }
+
+        function onLoopLengthFound(length) {
+            loopLength.length = length
         }
     }
 
@@ -456,6 +461,48 @@ Item {
                 renderStrategy: Canvas.Threaded
                 width: 256
                 height: 256
+            }
+        }
+
+        WText {
+            id: loopLength
+            property int length
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: 'Loop Length is processing...'
+            state: 'off'
+
+            states: [
+                State {
+                    name: 'on'
+                    PropertyChanges {
+                        loopLength {
+                            opacity: 1
+                        }
+                    }
+                },
+                State {
+                    name: 'off'
+                    PropertyChanges {
+                        loopLength {
+                            opacity: 0
+                        }
+                    }
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    PropertyAnimation {
+                        properties: "opacity"
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            ]
+
+            onLengthChanged: {
+                state = 'on'
+                text = 'Loop Length: ' + length
             }
         }
     }
