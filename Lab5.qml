@@ -79,10 +79,41 @@ Item {
 
             Item {
                 id: xor
-                required property int index;
+                required property int index
+                property int ruleVal: core.rule[index + 1]
+
+                states: [
+                    State {
+                        name: "on"
+                        when: xor.ruleVal == 1
+                        PropertyChanges {
+                            xDAr { opacity: 1 }
+                            xNodeText { opacity: 1 }
+                            xNode { opacity: 1 }
+                        }
+                    },
+                    State {
+                        name: "off"
+                        when: xor.ruleVal == 0
+                        PropertyChanges {
+                            xDAr { opacity: 0 }
+                            xNodeText { opacity: 0 }
+                            xNode { opacity: 0 }
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        PropertyAnimation {
+                            properties: "opacity"
+                            duration: 200
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                ]
 
                 Shape {
-
                     ShapePath {
                         strokeColor: constants.weakTextColor
                         strokeWidth: 2
@@ -95,7 +126,7 @@ Item {
                     }
 
                     ShapePath {
-                        id: rAr
+                        id: xRArTip
                         property real s: 15
                         property real h: s
                         property real w: s
@@ -104,10 +135,14 @@ Item {
 
                         startX: (row.boxSize + row.spacing) * (xor.index + 1) - w
                         startY: row.boxSize / 2 + h / 2
-                        PathLine { relativeX: rAr.w; y: row.boxSize / 2 }
-                        PathLine { relativeX: - rAr.w; y: row.boxSize / 2 - rAr.h / 2 }
-                        PathArc  { x: rAr.startX; y: rAr.startY; radiusX: 20; radiusY: 20 }
+                        PathLine { relativeX: xRArTip.w; y: row.boxSize / 2 }
+                        PathLine { relativeX: - xRArTip.w; y: row.boxSize / 2 - xRArTip.h / 2 }
+                        PathArc  { x: xRArTip.startX; y: xRArTip.startY; radiusX: 20; radiusY: 20 }
                     }
+                }
+
+                Shape {
+                    id: xDAr
 
                     ShapePath {
                         strokeColor: constants.weakTextColor
@@ -123,7 +158,7 @@ Item {
                     }
 
                     ShapePath {
-                        id: dAr
+                        id: xDArTip
                         property real s: 15
                         property real h: s
                         property real w: s
@@ -132,9 +167,9 @@ Item {
 
                         startX: row.boxSize + (row.spacing + row.boxSize) * xor.index + row.spacing / 2
                         startY: bottomArrow.y - row.boxSize / 2
-                        PathLine { relativeX: -dAr.w / 2; relativeY: -dAr.h }
-                        PathArc  { relativeX: dAr.w; relativeY: 0; radiusX: dAr.s; radiusY: dAr.s; direction: PathArc.Counterclockwise }
-                        PathLine { relativeX: -dAr.w / 2; relativeY: dAr.h }
+                        PathLine { relativeX: -xDArTip.w / 2; relativeY: -xDArTip.h }
+                        PathArc  { relativeX: xDArTip.w; relativeY: 0; radiusX: xDArTip.s; radiusY: xDArTip.s; direction: PathArc.Counterclockwise }
+                        PathLine { relativeX: -xDArTip.w / 2; relativeY: xDArTip.h }
                     }
                 }
 
@@ -152,7 +187,13 @@ Item {
                     }
 
                     MouseArea {
+                        id: xNodeMA
                         anchors.fill: parent
+                        hoverEnabled: true
+
+                        onClicked: core.rule[xor.index + 1] ^= 1
+                        onEntered: xNodeDashedBorder.state = 'on'
+                        onExited: xNodeDashedBorder.state = 'off'
                     }
 
                     WText {
@@ -163,6 +204,66 @@ Item {
                         text: '^'
                         color: constants.weakTextColor
                         font.pixelSize: constants.fontSize * 1.25
+                    }
+                }
+
+                Shape {
+                    id: xNodeDashedBorder
+                    anchors.fill: xNode
+                    state: 'off'
+
+                    states: [
+                        State {
+                            name: "on"
+                            PropertyChanges {
+                                target: xNodeDashedBorder
+                                opacity: 1
+                            }
+                        },
+                        State {
+                            name: "off"
+                            PropertyChanges {
+                                target: xNodeDashedBorder
+                                opacity: 0
+                            }
+                        }
+                    ]
+
+                    transitions: [
+                        Transition {
+                            PropertyAnimation {
+                                properties: "opacity"
+                                duration: 200
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    ]
+
+                    ShapePath {
+                        strokeColor: constants.weakTextColor
+                        strokeWidth: 2
+                        strokeStyle: ShapePath.DashLine
+                        dashPattern: [2, 4]
+                        fillColor: "transparent"
+
+                        startX: row.boxSize / 2
+                        startY: 1
+                        PathArc { relativeX: 0; y: row.boxSize - 1; radiusX: row.boxRad - 1; radiusY: row.boxRad - 1; }
+                        PathArc { relativeX: 0; y: 1; radiusX: row.boxRad - 1; radiusY: row.boxRad - 1; }
+                    }
+
+                    ShapePath {
+                        strokeColor: 'white'
+                        strokeWidth: 2
+                        strokeStyle: ShapePath.DashLine
+                        dashPattern: [2, 4]
+                        dashOffset: 3
+                        fillColor: "transparent"
+
+                        startX: row.boxSize / 2
+                        startY: 1
+                        PathArc { relativeX: 0; y: row.boxSize - 1; radiusX: row.boxRad - 1; radiusY: row.boxRad - 1; }
+                        PathArc { relativeX: 0; y: 1; radiusX: row.boxRad - 1; radiusY: row.boxRad - 1; }
                     }
                 }
             }

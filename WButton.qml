@@ -27,7 +27,7 @@ Item {
             id: wButtonMA
             hoverEnabled: true
             anchors.fill: parent
-            property bool hovered: false
+            // property bool hovered: false
             onEntered: {
                 wButtonRect.border.width = 1
             }
