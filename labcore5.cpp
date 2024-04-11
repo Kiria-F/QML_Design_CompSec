@@ -32,9 +32,9 @@ void LabCore5::updateRule(int rule) {
 }
 
 void LabCore5::timeout() {
-    // long x = generate(timerRule, timerPrev);
+    long x = generate(timerRule, timerPrev);
     // long x = generate(140563309249406177, timerPrev);
-    long x = (generator.generate() % 256 + generator.generate() % 256) / 2;
+    // long x = (generator.generate() % 256 + generator.generate() % 256) / 2;
     if (x == 1) {
         emit loopLengthFound(loopLength);
         loopLength = 1;
@@ -42,9 +42,9 @@ void LabCore5::timeout() {
         ++loopLength;
     }
 
-    // long y = generate(timerRule, x);
+    long y = generate(timerRule, x);
     // long y = generate(140563309249406177, x);
-    long y = (generator.generate() % 256 + generator.generate() % 256) / 2;
+    // long y = (generator.generate() % 256 + generator.generate() % 256) / 2;
     if (y == 1) {
         emit loopLengthFound(loopLength);
         loopLength = 1;
