@@ -3,19 +3,20 @@
 
 #include <QObject>
 
-class RawChainNode {
+class ChainNode {
 public:
     QByteArray nonce;
     QByteArray note;
     QByteArray prevHash;
     QByteArray hash;
 
-    RawChainNode(QString note, QByteArray prevHash);
+    ChainNode(QString note, QByteArray prevHash);
     void recalcHash();
-    RawChainNode& operator++();
+    bool validate(int targetPrefixLength);
+    ChainNode& operator++();
 };
 
-class ChainNode {
+class ChainNodeWrapper {
     Q_GADGET
 
 public:
@@ -28,8 +29,8 @@ public:
     Q_PROPERTY(QString hash MEMBER hash)
     QString hash;
 
-    ChainNode(QString nonce, QString note, QString prevHash, QString hash);
-    ChainNode(RawChainNode rawChainNode);
+    ChainNodeWrapper(QString nonce, QString note, QString prevHash, QString hash);
+    ChainNodeWrapper(ChainNode ChainNode);
 };
 
 class LabCore6 : public QObject
@@ -42,6 +43,7 @@ public slots:
     void mine(QString prevHash, QString note, int targetPrefixLength);
 
 signals:
+    void mined(ChainNodeWrapper);
 };
 
 #endif // LABCORE6_H
