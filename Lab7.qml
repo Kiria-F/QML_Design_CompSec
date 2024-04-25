@@ -182,4 +182,72 @@ Item {
             dk4Enc.text = labCore7.encrypt(kk2Enc.text, dk4Raw.text);
         }
     }
+
+    Shape {
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.5
+            startY: 120
+            PathLine { x: core.width * 0.25; y: 150 }
+        }
+
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.5
+            startY: 120
+            PathLine { x: core.width * 0.75; y: 150 }
+        }
+
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.25
+            startY: 300
+            PathLine { x: core.width * 0.13; y: 350 }
+        }
+
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.25
+            startY: 300
+            PathLine { x: core.width * 0.37; y: 350 }
+        }
+
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.75
+            startY: 300
+            PathLine { x: core.width * 0.63; y: 350 }
+        }
+
+        ShapePath {
+            strokeColor: constants.weakTextColor
+            strokeWidth: 2
+            fillColor: 'transparent'
+            capStyle: ShapePath.FlatCap
+
+            startX: core.width * 0.75
+            startY: 300
+            PathLine { x: core.width * 0.87; y: 350 }
+        }
+    }
 }
