@@ -26,6 +26,7 @@ qt_add_qml_module(appComputerSecurityLabs
     SOURCES labcore4.h labcore4.cpp
     SOURCES labcore5.h labcore5.cpp
     SOURCES labcore6.h labcore6.cpp
+    SOURCES labcore7.h labcore7.cpp
     QML_FILES Main.qml
     QML_FILES Lab1.qml
     QML_FILES Lab2.qml

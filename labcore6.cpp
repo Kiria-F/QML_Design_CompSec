@@ -50,9 +50,7 @@ ChainNodeWrapper::ChainNodeWrapper(ChainNode chainNode) :
     nonce(QCA::arrayToHex(chainNode.nonce)),
     note(QString::fromUtf8(chainNode.note)),
     prevHash(QCA::arrayToHex(chainNode.prevHash)),
-    hash(QCA::arrayToHex(chainNode.hash)) {
-    // qDebug() << nonce << '\n' << note << '\n' << prevHash << '\n' << hash;
-}
+    hash(QCA::arrayToHex(chainNode.hash)) {}
 
 Miner::Miner(QObject* parent) : QObject(parent) {}
 

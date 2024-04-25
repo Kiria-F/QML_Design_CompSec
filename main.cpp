@@ -10,6 +10,7 @@
 #include "labcore4.h"
 #include "labcore5.h"
 #include "labcore6.h"
+#include "labcore7.h"
 #include "iofile.h"
 #include "constants.h"
 #include "qmltools.h"
@@ -35,7 +36,8 @@ int main(int argc, char *argv[])
         { "labCore3", new LabCore3(&app) },
         { "labCore4", new LabCore4(&app) },
         { "labCore5", new LabCore5(&app) },
-        { "labCore6", new LabCore6(&app) }
+        { "labCore6", new LabCore6(&app) },
+        { "labCore7", new LabCore7(&app) }
     };
     for (auto integration = integrations.constKeyValueBegin(); integration != integrations.constKeyValueEnd(); ++integration) {
         engine.rootContext()->setContextProperty(integration->first, integration->second);
