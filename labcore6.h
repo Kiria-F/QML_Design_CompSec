@@ -2,6 +2,7 @@
 #define LABCORE6_H
 
 #include <QObject>
+#include <QThread>
 
 class ChainNode {
 public:
@@ -33,16 +34,31 @@ public:
     ChainNodeWrapper(ChainNode ChainNode);
 };
 
-class LabCore6 : public QObject
-{
+class Miner : public QObject {
     Q_OBJECT
+
 public:
-    explicit LabCore6(QObject *parent = nullptr);
+    explicit Miner(QObject* parent = nullptr);
 
 public slots:
     void mine(QString prevHash, QString note, int targetPrefixLength);
 
 signals:
+    void mined(ChainNodeWrapper);
+};
+
+class LabCore6 : public QObject {
+    Q_OBJECT
+
+    Miner miner;
+    QThread minerThread;
+
+public:
+    explicit LabCore6(QObject *parent = nullptr);
+    ~LabCore6();
+
+signals:
+    void mine(QString prevHash, QString note, int targetPrefixLength);
     void mined(ChainNodeWrapper);
 };
 
